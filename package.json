@@ -3,20 +3,46 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@kunukn/react-collapse": "^2.2.9",
+    "@material-ui/core": "^4.12.3",
+    "@material-ui/icons": "^4.11.2",
+    "@material-ui/lab": "^4.0.0-alpha.60",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
     "@testing-library/user-event": "^7.2.1",
+    "@types/color": "^3.0.2",
     "@types/jest": "^24.9.1",
     "@types/node": "^12.20.21",
     "@types/react": "^16.14.14",
+    "@types/react-beautiful-dnd": "^13.1.1",
     "@types/react-dom": "^16.9.14",
     "@types/react-redux": "^7.1.18",
+    "await-lock": "^2.1.0",
+    "chart.js": "^3.5.1",
+    "chartjs-adapter-luxon": "^1.1.0",
+    "chartjs-plugin-streaming": "^2.0.0",
+    "chartjs-plugin-zoom": "^1.1.1",
+    "clsx": "^1.1.1",
+    "color": "^3.2.1",
+    "cors": "^2.8.5",
+    "dotenv": "^10.0.0",
+    "luxon": "^2.0.2",
+    "mathjs": "^9.4.4",
+    "plotly.js": "^2.3.1",
+    "plotly.js-basic-dist": "^2.3.1",
+    "plotly.js-dist": "^2.3.1",
     "react": "^17.0.2",
+    "react-beautiful-dnd": "^13.1.0",
+    "react-chartjs-2": "^3.0.4",
     "react-dom": "^17.0.2",
+    "react-plotly.js": "^2.5.1",
     "react-redux": "^7.2.4",
+    "react-resizable": "^3.0.4",
     "react-scripts": "4.0.3",
-    "typescript": "^4.1.6"
+    "typescript": "^4.1.6",
+    "uuid": "^8.3.2",
+    "web-vitals": "^1.1.2"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -38,5 +64,9 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/react-resizable": "^1.7.3",
+    "sass": "^1.38.0"
   }
 }

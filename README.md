@@ -42,3 +42,12 @@ You don’t have to ever use `eject`. The curated feature set is suitable for sm
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
+
+## To Add Something
+
+### Naming Conventions
+
+The filenames currently follow the following conventions:
+1. React components: `FooBar.ts`;
+2. Redux slices: `fooBar.ts`;
+3. Otherwise: `foo-bar.ts`.
