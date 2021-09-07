@@ -1,5 +1,6 @@
 import { Box, createStyles, Grid, makeStyles, Theme, useTheme } from '@material-ui/core';
 import React from "react";
+import { DockTabProps } from '../dock/dock-properties';
 import { selectLastSMUACurrent, selectLastSMUAVoltage, selectLastSMUBCurrent, selectLastSMUBVoltage, selectSMUACurrents, selectSMUAVoltages, selectSMUBCurrents, selectSMUBVoltages } from './monitorSlice';
 import { CHART_COLORS, RealtimePlot } from './widget/RealtimePlot';
 import { RealtimeTable } from './widget/RealtimeTable';
@@ -8,7 +9,8 @@ import { SevenSeg } from './widget/SevenSeg';
 
 const useStylesVertical = makeStyles((theme: Theme) => createStyles({
     monitorTabContainer: {
-        padding: theme.spacing(0, 2)
+        padding: theme.spacing(0, 2),
+        maxHeight: "100%",
     },
     monitorUnit: {
         [theme.breakpoints.down("sm")]: {
@@ -42,15 +44,15 @@ const useStylesHorizontal = makeStyles((theme: Theme) => createStyles({
     }
 }));
 
-interface Props {
-    position: "vertical" | "horizontal"
+interface Props extends DockTabProps {
+
 }
 
 export const MonitorTab: React.FC<Props> = (props) => {
     const theme = useTheme();
     const classesVertical = useStylesVertical(theme);
     const classesHoritontal = useStylesHorizontal(theme);
-    const classes = props.position === 'vertical' ? classesVertical : classesHoritontal;
+    const classes = props.position === 'bottom' ? classesHoritontal : classesVertical;
 
     return (
         <Box className={classes.monitorTabContainer} >

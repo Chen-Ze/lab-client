@@ -1,6 +1,7 @@
 import { Action, createEntityAdapter, createSlice, EntityId, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "react";
 import { RootState } from "../../app/store";
+import { sequenceImported } from "../sequence/sequenceSlice";
 import { experimentAdded, ExperimentAddedPayload, ExperimentEntity } from "../subsequence/subsequenceSlice";
 
 
@@ -26,6 +27,8 @@ const pauseAdapter = createEntityAdapter<PauseEntity>();
 
 const initialState = pauseAdapter.getInitialState();
 
+export type PauseState = typeof initialState;
+
 interface PauseUpdatedPayload {
     id: EntityId,
     name: string,
@@ -50,7 +53,9 @@ const pauseSlice = createSlice({
         builder.addCase(experimentAdded, (state, { payload: { experimentEntity } }) => {
             if (isPauseEntity(experimentEntity))
                 pauseAdapter.addOne(state, experimentEntity);
-        });
+        }).addCase(sequenceImported, (state, {payload}) => {
+            return payload.pause;
+        });;
     }
 });
 

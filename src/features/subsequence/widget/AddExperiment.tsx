@@ -1,4 +1,4 @@
-import { Box, ClickAwayListener, createStyles, IconButton, makeStyles, Theme, useTheme } from "@material-ui/core";
+import { Box, ClickAwayListener, createStyles, IconButton, makeStyles, Theme, Tooltip, useTheme } from "@material-ui/core";
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import FlareIcon from '@material-ui/icons/Flare';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
@@ -84,29 +84,35 @@ export const AddExperiment: React.FC<Props> = (props) => {
                                 [classes.animationOut]: closing
                             })}
                         >
-                            <IconButton onClick={() => {
-                                dispatch(pauseAddedCreator({
-                                    subsequenceId: props.id,
-                                    experimentEntity: defaultPauseEntity()
-                                }));
-                                setOpen(false);
-                            }}>
-                                <PlayCircleOutlineIcon />
-                            </IconButton>
-                            <IconButton onClick={() => {
-                                dispatch(keithley2636AddedCreator({
-                                    subsequenceId: props.id,
-                                    experimentEntity: defaultKeithley2636Entity()
-                                }));
-                                setOpen(false);
-                            }}>
-                                <SpeedIcon />
-                            </IconButton>
-                            <IconButton onClick={() => {
-                                setOpen(false);
-                            }}>
-                                <FlareIcon />
-                            </IconButton>
+                            <Tooltip title="Pause" aria-label="add pause" >
+                                <IconButton onClick={() => {
+                                    dispatch(pauseAddedCreator({
+                                        subsequenceId: props.id,
+                                        experimentEntity: defaultPauseEntity()
+                                    }));
+                                    setOpen(false);
+                                }}>
+                                    <PlayCircleOutlineIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Keithley 2636" aria-label="add pause" >
+                                <IconButton onClick={() => {
+                                    dispatch(keithley2636AddedCreator({
+                                        subsequenceId: props.id,
+                                        experimentEntity: defaultKeithley2636Entity()
+                                    }));
+                                    setOpen(false);
+                                }}>
+                                    <SpeedIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="LightField" aria-label="LightField" >
+                                <IconButton onClick={() => {
+                                    setOpen(false);
+                                }}>
+                                    <FlareIcon />
+                                </IconButton>
+                            </Tooltip>
                         </Box>
                     </ClickAwayListener>
                 }

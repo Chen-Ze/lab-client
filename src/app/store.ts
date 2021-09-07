@@ -5,6 +5,10 @@ import pauseReducer from '../features/pause/pauseSlice';
 import subsequenceReducer from '../features/subsequence/subsequenceSlice';
 import settingReducer from '../features/setting/settingSlice';
 import monitorReducer from '../features/monitor/monitorSlice';
+import dockReducer from '../features/dock/dockSlice';
+import dataGridReducer from '../features/data/dataGridSlice';
+import sequenceReducer from '../features/sequence/sequenceSlice';
+import alertReducer from '../features/alert/alertSlice';
 
 
 export const store = configureStore({
@@ -14,7 +18,11 @@ export const store = configureStore({
         pause: pauseReducer,
         subsequence: subsequenceReducer,
         setting: settingReducer,
-        monitor: monitorReducer
+        monitor: monitorReducer,
+        dock: dockReducer,
+        dataGrid: dataGridReducer,
+        sequence: sequenceReducer,
+        alert: alertReducer,
     },
 });
 

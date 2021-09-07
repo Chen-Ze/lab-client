@@ -1,6 +1,7 @@
 import { Action, createEntityAdapter, createSlice, EntityId, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { Dispatch } from "react";
 import { RootState } from "../../app/store";
+import { sequenceImported } from "../sequence/sequenceSlice";
 import { experimentAdded, ExperimentAddedPayload, ExperimentEntity, subsequenceAdded } from "../subsequence/subsequenceSlice";
 
 
@@ -147,6 +148,8 @@ const keithley2636Adapter = createEntityAdapter<Keithley2636Entity>();
 
 const initialState = keithley2636Adapter.getInitialState();
 
+export type Keithley2636State = typeof initialState;
+
 interface Keithley2636UpdatedPayload {
     id: EntityId,
     name: string,
@@ -217,6 +220,8 @@ const keithley2636Slice = createSlice({
             if (isKeithley2636Entity(experimentEntity)) {
                 keithley2636Adapter.addOne(state, experimentEntity);
             }
+        }).addCase(sequenceImported, (state, {payload}) => {
+            return payload.keithley2636;
         });
     }
 });

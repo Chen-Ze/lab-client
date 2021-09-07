@@ -1,7 +1,12 @@
-import { alpha, AppBar, Box, createStyles, Grid, makeStyles, Theme, useTheme } from "@material-ui/core";
+import { alpha, AppBar, Box, createStyles, Grid, makeStyles, Theme, Tooltip, useTheme } from "@material-ui/core";
 import CheckIcon from '@material-ui/icons/Check';
 import DvrIcon from '@material-ui/icons/Dvr';
-
+import TableChartIcon from '@material-ui/icons/TableChart';
+import CodeIcon from '@material-ui/icons/Code';
+import TimelineIcon from '@material-ui/icons/Timeline';
+import { useDispatch } from "react-redux";
+import { toggleTab } from "../features/dock/dockSlice";
+import { TabName } from "../features/dock/dock-properties";
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -28,7 +33,7 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         alignItems: "center",
         justifyContent: "center",
     },
-    monitor: {
+    iconWrapper: {
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -39,26 +44,52 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 interface Props {
-    monitorOpen: boolean,
-    setMonitorOpen: (monitorOpen: boolean) => void,
 }
 
 export const BottomBar: React.FC<Props> = (props) => {
     const theme = useTheme();
     const classes = useStyles(theme);
 
+    const dispatch = useDispatch();
+
     return (
         <AppBar position="relative" className={classes.appBar} >
             <Box className={classes.box} >
                 <Grid container spacing={0} alignItems="center" >
-                    <Grid item xs={2} sm={1} className={classes.status} >
-                        <CheckIcon />
-                    </Grid>
-                    <Grid item xs={2} sm={1} className={classes.monitor}
-                        onClick={(e) => props.setMonitorOpen(!props.monitorOpen)}
-                    >
-                        <DvrIcon />
-                    </Grid>
+                    <Tooltip title="Connected Successfully" aria-label="connected successfully">
+                        <Grid item xs={2} sm={1} className={classes.status} >
+                            <CheckIcon />
+                        </Grid>
+                    </Tooltip>
+                    <Tooltip title="Monitor" aria-label="monitor">
+                        <Grid item xs={2} sm={1} className={classes.iconWrapper}
+                            onClick={(e) => dispatch(toggleTab(TabName.Monitor))}
+                        >
+                            <DvrIcon />
+                        </Grid>
+                    </Tooltip>
+                    <Tooltip title="Data" aria-label="data">
+                        <Grid item xs={2} sm={1} className={classes.iconWrapper}
+                            onClick={(e) => dispatch(toggleTab(TabName.Data))}
+                        >
+                            <TableChartIcon />
+
+                        </Grid>
+                    </Tooltip>
+                    <Tooltip title="Sequence" aria-label="sequence">
+                        <Grid item xs={2} sm={1} className={classes.iconWrapper}
+                            onClick={(e) => dispatch(toggleTab(TabName.Sequence))}
+                        >
+                            <CodeIcon />
+                        </Grid>
+                    </Tooltip>
+                    <Tooltip title="Plot" aria-label="plot">
+                        <Grid item xs={2} sm={1} className={classes.iconWrapper}
+                            onClick={(e) => dispatch(toggleTab(TabName.Plot))}
+                        >
+                            <TimelineIcon />
+                        </Grid>
+                    </Tooltip>
                 </Grid>
             </Box>
         </AppBar>

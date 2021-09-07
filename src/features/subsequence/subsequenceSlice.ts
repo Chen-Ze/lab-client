@@ -1,5 +1,6 @@
 import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { sequenceImported } from "../sequence/sequenceSlice";
 import { reorder } from "../util/util";
 
 
@@ -18,6 +19,8 @@ export interface SubsequenceEntity {
 const subsequenceAdapter = createEntityAdapter<SubsequenceEntity>({});
 
 const initialState = subsequenceAdapter.getInitialState();
+
+export type SubsequenceState = typeof initialState;
 
 export interface ExperimentAddedPayload {
     subsequenceId: EntityId,
@@ -77,6 +80,11 @@ const subsequenceSlice = createSlice({
                 }
             )
         }
+    },
+    extraReducers: (builder) => {
+        builder.addCase(sequenceImported, (state, {payload}) => {
+            return payload.subsequence;
+        });
     }
 });
 

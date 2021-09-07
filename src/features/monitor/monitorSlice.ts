@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { lastElement, sleep } from "../util/util";
+import axios from 'axios';
 
 
 const FETCH_DELAY = 500;
@@ -24,17 +25,17 @@ const initialState: MonitorState = {
     smuBCurrents: []
 };
 
-export const fetchKeithley2636 = createAsyncThunk('monitor/fetchSMUAVoltage', async () => {
-    const smuAVoltageResponse = await (await fetch('http://localhost:8888/controller?function=query&name=Keithley2636&command=print')).json();
+export const fetchKeithley2636 = createAsyncThunk('monitor/fetchKeithley2636', async () => {
+    const smuAVoltageResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
     const smuAVoltageTime = Date.now();
     await sleep(FETCH_DELAY);
-    const smuACurrentResponse = await (await fetch('http://localhost:8888/controller?function=query&name=Keithley2636&command=print')).json();
+    const smuACurrentResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
     const smuACurrentTime = Date.now();
     await sleep(FETCH_DELAY);
-    const smuBVoltageResponse = await (await fetch('http://localhost:8888/controller?function=query&name=Keithley2636&command=print')).json();
+    const smuBVoltageResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
     const smuBVoltageTime = Date.now();
     await sleep(FETCH_DELAY);
-    const smuBCurrentResponse = await (await fetch('http://localhost:8888/controller?function=query&name=Keithley2636&command=print')).json();
+    const smuBCurrentResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
     const smuBCurrentTime = Date.now();
     await sleep(FETCH_DELAY);
     return {

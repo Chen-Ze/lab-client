@@ -11,6 +11,7 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { keithley2636AddressSet, selectSetting } from '../features/setting/settingSlice';
 
+
 const useStyles = makeStyles((theme: Theme) => createStyles({
     root: {
         flexGrow: 1,
@@ -38,6 +39,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     expandOpen: {
         transform: 'rotate(180deg)',
     },
+    monospace: {
+        fontFamily: "Courier New, monospace",
+    },
 }));
 
 interface Props {
@@ -57,9 +61,6 @@ export const Topbar: React.FC<Props> = (props) => {
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
-
-    // To make sure that the height is recalculated after the animation ends
-    // setFlag(!flag) after each animation is done
 
     return (
         <AppBar position="relative" className={classes.appBar} >
@@ -98,10 +99,11 @@ export const Topbar: React.FC<Props> = (props) => {
                             onChange={e => dispatch(keithley2636AddressSet(String(e.target.value)))}
                             label="Keithley 2636 Address"
                             color="primary"
+                            className={classes.monospace}
                         >
                             {
                                 setting.availableAddresses.map(address => (
-                                    <MenuItem key={address} value={address}>
+                                    <MenuItem key={address} value={address} className={classes.monospace} >
                                         {address}
                                     </MenuItem>
                                 ))

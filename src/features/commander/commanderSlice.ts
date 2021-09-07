@@ -1,9 +1,10 @@
 import { createSlice, EntityId } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
+import { sequenceImported } from "../sequence/sequenceSlice";
 import { commanderSubsequenceAdded, selectSubsequenceById } from "../subsequence/subsequenceSlice";
 
 
-type CommanderState = { subsequenceId: EntityId };
+export type CommanderState = { subsequenceId: EntityId };
 
 const initialState: CommanderState = { 
     subsequenceId: "INIT_NOT_DONE"
@@ -17,6 +18,8 @@ const commanderSlice = createSlice({
     extraReducers: (builder) => {
         builder.addCase(commanderSubsequenceAdded, (state, { payload }) => {
             state.subsequenceId = payload.id;
+        }).addCase(sequenceImported, (state, {payload}) => {
+            return payload.commander;
         });
     }
 });

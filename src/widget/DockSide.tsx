@@ -1,5 +1,6 @@
 import { alpha, createStyles, Grid, makeStyles, Theme, useTheme } from "@material-ui/core"
 import clsx from "clsx";
+import { TabPosition } from "../features/dock/dock-properties";
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -41,8 +42,8 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 interface Props {
-    selected: 'left' | 'bottom' | 'right',
-    onSelection: (selected: 'left' | 'bottom' | 'right') => void
+    selected: TabPosition,
+    onSelection: (selected: TabPosition) => void
 }
 
 export const DockSide: React.FC<Props> = (props) => {
@@ -54,9 +55,9 @@ export const DockSide: React.FC<Props> = (props) => {
             <Grid item >
                 <div
                     className={clsx(classes.icon, {
-                        [classes.iconSelected]: props.selected === 'left'
+                        [classes.iconSelected]: props.selected === TabPosition.Left
                     })}
-                    onClick={() => props.onSelection("left")}
+                    onClick={() => props.onSelection(TabPosition.Left)}
                 >
                     <div className={clsx(classes.left)} >
                     </div>
@@ -65,9 +66,9 @@ export const DockSide: React.FC<Props> = (props) => {
             <Grid item >
                 <div
                     className={clsx(classes.icon, {
-                        [classes.iconSelected]: props.selected === 'bottom'
+                        [classes.iconSelected]: props.selected === TabPosition.Bottom
                     })}
-                    onClick={() => props.onSelection("bottom")}
+                    onClick={() => props.onSelection(TabPosition.Bottom)}
                 >
                     <div className={clsx(classes.bottom)} >
                     </div>
@@ -76,9 +77,9 @@ export const DockSide: React.FC<Props> = (props) => {
             <Grid item >
                 <div
                     className={clsx(classes.icon, {
-                        [classes.iconSelected]: props.selected === 'right'
+                        [classes.iconSelected]: props.selected === TabPosition.Right
                     })}
-                    onClick={() => props.onSelection("right")}
+                    onClick={() => props.onSelection(TabPosition.Right)}
                 >
                     <div className={clsx(classes.right)} >
                     </div>

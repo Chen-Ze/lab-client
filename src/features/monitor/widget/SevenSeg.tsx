@@ -4,7 +4,7 @@ import React from "react";
 
 
 const DEFAULT_PRECISION = 4;
-const DEFAULT_NOTATION = 'engineering';
+const DEFAULT_NOTATION = 'exponential';
 
 export const useStyles = makeStyles((theme: Theme) => createStyles({
     sevenSeg: {

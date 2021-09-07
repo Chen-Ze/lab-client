@@ -263,7 +263,7 @@ export const Channel: React.FC<ChannelProps> = (props) => {
     return (
         <Grid container spacing={1} alignItems="center" justifyContent="center" >
             <Grid item className={classes.title} xs={12} sm={3} md={4} lg={3}>
-                <Typography variant="h5" >
+                <Typography variant="h6" >
                     {props.title}
                 </Typography>
             </Grid>

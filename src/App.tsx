@@ -1,19 +1,20 @@
-import { Box, createStyles, createTheme, CssBaseline, Grid, makeStyles, PaletteType, Theme, ThemeProvider, useMediaQuery, useTheme } from '@material-ui/core';
+import { Box, createStyles, createTheme, CssBaseline, Grid, makeStyles, PaletteType, Theme, ThemeProvider, useTheme } from '@material-ui/core';
 import { nanoid } from '@reduxjs/toolkit';
 import clsx from 'clsx';
 import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { ResizableBox } from 'react-resizable';
+import { useDispatch, useSelector } from 'react-redux';
 import "react-resizable/css/styles.css";
 import './App.scss';
+import { AlertBar } from './features/alert/AlertBar';
 import { CommanderTab } from './features/commander/CommanderTab';
+import { Dock } from './features/dock/Dock';
+import { TabPosition } from './features/dock/dock-properties';
+import { selectBottomDockNonEmpty, selectLeftDockNonEmpty, selectRightDockNonEmpty } from './features/dock/dockSlice';
 import { fetchKeithley2636 } from './features/monitor/monitorSlice';
-import { MonitorTab } from './features/monitor/MonitorTab';
+import { fetchAvailableAddresses } from './features/setting/settingSlice';
 import { commanderSubsequenceAdded } from './features/subsequence/subsequenceSlice';
 import { BottomBar } from './widget/BottomBar';
-import { DockTopBar } from './widget/DockTopBar';
 import { Topbar } from './widget/Topbar';
-
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -38,6 +39,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         minHeight: "100%",
         width: "50%",
     },
+    mainLeftRightGridTabColumn: {
+        height: "100%",
+        maxHeight: "100%",
+        minHeight: "100%",
+        width: "50%"
+    },
     rightCell: {
         borderLeft: `thin solid ${theme.palette.text.hint}`,
     },
@@ -51,6 +58,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         display: "flex",
         flexDirection: "column"
     },
+    bottomDiv: {
+        borderTop: `thin solid ${theme.palette.text.hint}`,
+    },
 }));
 
 interface Props {
@@ -62,11 +72,9 @@ const AppContent: React.FC<Props> = (props) => {
     const theme = useTheme();
     const classes = useStyles(theme);
 
-    type TabPosition = 'left' | 'bottom' | 'right';
-    const largeUp = useMediaQuery(theme.breakpoints.up('lg'));
-
-    const [monitorOpen, setMonitorOpen] = useState(false);
-    const [monitorPosition, setMonitorPosition] = useState((largeUp ? 'right' : 'bottom') as TabPosition);
+    const leftDockNonEmpty = useSelector(selectLeftDockNonEmpty);
+    const bottomDockNonEmpty = useSelector(selectBottomDockNonEmpty);
+    const rightDockNonEmpty = useSelector(selectRightDockNonEmpty);
 
     const commanderTab = <CommanderTab />;
 
@@ -77,66 +85,45 @@ const AppContent: React.FC<Props> = (props) => {
     return (
         <Box className={classes.bodyBox} >
             <Topbar {...props} />
-            {!monitorOpen && <Box className={classes.mainBox} >
-                {commanderTab}
-            </Box>}
-            {monitorOpen && (monitorPosition === 'right') &&
+            {(!leftDockNonEmpty && !rightDockNonEmpty) &&
+                <Box className={classes.mainBox} >
+                    {commanderTab}
+                </Box>
+            }
+            {(leftDockNonEmpty || rightDockNonEmpty) &&
                 <Grid container className={classes.mainLeftRightGrid} >
-                    <Grid item xs={6} className={classes.mainLeftRightGridColumn} >
+                    <Grid item xs={6} className={clsx(
+                        classes.leftCell, {
+                            [classes.mainLeftRightGridColumn]: !leftDockNonEmpty,
+                            [classes.mainLeftRightGridTabColumn]: leftDockNonEmpty
+                        })}
+                    >
                         {
-                            commanderTab
+                            leftDockNonEmpty && <Dock position={TabPosition.Left} />
+                        }
+                        {
+                            !leftDockNonEmpty && commanderTab
                         }
                     </Grid>
                     <Grid item xs={6} className={clsx(
-                        classes.mainLeftRightGridColumn,
-                        classes.rightCell
-                    )} >
+                        classes.rightCell, {
+                            [classes.mainLeftRightGridColumn]: !rightDockNonEmpty,
+                            [classes.mainLeftRightGridTabColumn]: rightDockNonEmpty
+                        })}
+                    >
                         {
-                            <Box >
-                                <DockTopBar selected="right" onSelection={setMonitorPosition} onClose={() => setMonitorOpen(false)} />
-                                <MonitorTab position="vertical" />
-                            </Box>
+                            rightDockNonEmpty && <Dock position={TabPosition.Right} />
+                        }
+                        {
+                            !rightDockNonEmpty && commanderTab
                         }
                     </Grid>
                 </Grid>
             }
-            {monitorOpen && (monitorPosition === 'left') &&
-                <Grid container className={classes.mainLeftRightGrid} >
-                    <Grid item xs={6} className={clsx(
-                        classes.mainLeftRightGridColumn,
-                        classes.leftCell
-                    )} >
-                        {
-                            <Box >
-                                <DockTopBar selected="left" onSelection={setMonitorPosition} onClose={() => setMonitorOpen(false)} />
-                                <MonitorTab position="vertical" />
-                            </Box>
-                        }
-                    </Grid>
-                    <Grid item xs={6} className={classes.mainLeftRightGridColumn} >
-                        {
-                            commanderTab
-                        }
-                    </Grid>
-                </Grid>
+            {bottomDockNonEmpty &&
+                <Dock position={TabPosition.Bottom} />
             }
-            {monitorOpen && (monitorPosition === 'bottom') && <Box className={classes.mainBox} >
-                {commanderTab}
-            </Box>}
-            {monitorOpen && (monitorPosition === 'bottom') &&
-                <ResizableBox
-                    height={0.4 * document.documentElement.clientHeight}
-                    width={document.documentElement.clientWidth}
-                    maxConstraints={[Infinity, 0.6 * document.documentElement.clientHeight]}
-                    axis="y" resizeHandles={["n"]}
-                >
-                    <Box className={classes.bottomBox} >
-                        <DockTopBar selected="bottom" onSelection={setMonitorPosition} onClose={() => setMonitorOpen(false)} />
-                        <MonitorTab position="horizontal" />
-                    </Box>
-                </ResizableBox>
-            }
-            <BottomBar {...{ monitorOpen, setMonitorOpen }} />
+            <BottomBar />
         </Box>
     );
 }
@@ -156,6 +143,7 @@ function ThemedApp() {
         <ThemeProvider theme={theme} >
             <CssBaseline />
             <AppContent {...{ paletteType, setPaletteType }} />
+            <AlertBar />
         </ThemeProvider>
     );
 }
@@ -164,8 +152,13 @@ function App() {
     const dispatch = useDispatch();
     const dispatchMonitor = () => {
         dispatch(fetchKeithley2636());
-        setTimeout(dispatchMonitor, 4000)
+        setTimeout(dispatchMonitor, 4000);
+    };
+    const dispatchAddresses = () => {
+        dispatch(fetchAvailableAddresses());
+        setTimeout(dispatchAddresses, 2000);
     }
+
     useEffect(() => {
         dispatch(commanderSubsequenceAdded({
             id: nanoid(),
@@ -175,6 +168,7 @@ function App() {
         window.scrollTo(0, 1000);
 
         dispatchMonitor();
+        dispatchAddresses();
     });
 
     return <ThemedApp />;
