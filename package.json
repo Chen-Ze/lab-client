@@ -11,6 +11,7 @@
     "@monaco-editor/react": "^4.2.2",
     "@mui/x-data-grid": "^4.0.0",
     "@mui/x-data-grid-pro": "^4.0.0",
+    "@react-nano/use-event-source": "^0.10.0",
     "@reduxjs/toolkit": "^1.6.1",
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.5.0",
@@ -36,7 +37,7 @@
     "file-saver": "^2.0.5",
     "http-proxy-middleware": "^2.0.1",
     "luxon": "^2.0.2",
-    "material-science-experiment-recipes": "^1.0.7",
+    "material-science-experiment-recipes": "^1.0.15",
     "mathjs": "^9.4.4",
     "plotly.js": "^2.3.1",
     "plotly.js-basic-dist": "^2.3.1",
@@ -79,6 +80,8 @@
   "devDependencies": {
     "@types/dateformat": "^3.0.1",
     "@types/file-saver": "^2.0.3",
+    "@types/plotly.js-basic-dist": "^1.54.0",
+    "@types/react-plotly.js": "^2.5.0",
     "@types/react-resizable": "^1.7.3",
     "sass": "^1.38.0"
   }

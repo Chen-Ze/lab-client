@@ -1,14 +1,17 @@
 import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
+import { Recipe } from "material-science-experiment-recipes/lib/recipe";
 import { RootState } from "../../app/store";
 import { sequenceImported } from "../sequence/sequenceSlice";
 import { reorder } from "../util/util";
 
 
-export interface ExperimentEntity {
+export interface ExperimentEntity<T extends Recipe> {
     id: EntityId,
     type: string,
     enabled: boolean,
     measuring: boolean,
+    recipe: T,
+    subsequenceId?: EntityId,
 };
 
 export interface SubsequenceEntity {
@@ -22,9 +25,9 @@ const initialState = subsequenceAdapter.getInitialState();
 
 export type SubsequenceState = typeof initialState;
 
-export interface ExperimentAddedPayload {
+export interface ExperimentAddedPayload<T extends Recipe> {
     subsequenceId: EntityId,
-    experimentEntity: ExperimentEntity
+    experimentEntity: ExperimentEntity<T>
 }
 
 export interface ExperimentRemovedPayload {
@@ -44,7 +47,7 @@ const subsequenceSlice = createSlice({
     reducers: {
         subsequenceAdded: subsequenceAdapter.addOne,
         commanderSubsequenceAdded: subsequenceAdapter.addOne,
-        experimentAdded: (state, action: PayloadAction<ExperimentAddedPayload>) => {
+        experimentAdded: (state, action: PayloadAction<ExperimentAddedPayload<Recipe>>) => {
             const { subsequenceId, experimentEntity: { id: experimentId } } = action.payload;
             subsequenceAdapter.updateOne(
                 state,

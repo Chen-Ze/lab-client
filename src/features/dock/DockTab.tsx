@@ -1,3 +1,4 @@
+import { AlertTab } from "../alert/AlertTab";
 import { DataGridTab } from "../data/DataGridTab";
 import { MonitorTab } from "../monitor/MonitorTab";
 import { PlotTab } from "../plot/PlotTab";
@@ -20,5 +21,7 @@ export const DockTab: React.FC<Props> = (props) => {
             return <SequenceTab {...props.tabProps} />;
         case TabName.Plot:
             return <PlotTab {...props.tabProps} />;
+        case TabName.Alert:
+            return <AlertTab {...props.tabProps} />;
     }
 }

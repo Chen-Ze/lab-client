@@ -1,5 +1,6 @@
 import { Card, CardContent, createStyles, Grid, makeStyles, Theme, useTheme } from '@material-ui/core';
 import clsx from 'clsx';
+import { isSweepChannelRecipe } from 'material-science-experiment-recipes/lib/keithley-2636-simple-recipe';
 import { useDispatch } from 'react-redux';
 import { TabAction } from "../../widget/TabAction";
 import { TabCollapse } from "../../widget/TabCollapse";
@@ -7,7 +8,7 @@ import { SubsequenceTab } from '../subsequence/SubsequenceTab';
 import { ExperimentTabProps } from '../util/props';
 import { tabStyles } from '../util/styles';
 import { Channel } from "./channel/Channel";
-import { isSweepChannelRecipe, Keithley2636Entity, keithley2636SMUModeUpdated, keithley2636SMUUpdated, keithley2636Updated } from './keithley2636Slice';
+import { Keithley2636Entity, keithley2636SMUModeUpdated, keithley2636SMUUpdated, keithley2636Updated } from './keithley2636Slice';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

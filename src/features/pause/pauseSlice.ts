@@ -1,15 +1,17 @@
 import { Action, createEntityAdapter, createSlice, EntityId, nanoid, PayloadAction } from "@reduxjs/toolkit";
+import { defaultPauseRecipe, PauseRecipe } from "material-science-experiment-recipes/lib/pause-recipe";
+import { Recipe } from "material-science-experiment-recipes/lib/recipe";
 import { Dispatch } from "react";
 import { RootState } from "../../app/store";
 import { sequenceImported } from "../sequence/sequenceSlice";
 import { experimentAdded, ExperimentAddedPayload, ExperimentEntity } from "../subsequence/subsequenceSlice";
 
 
-export interface PauseEntity extends ExperimentEntity {
+export interface PauseEntity extends ExperimentEntity<PauseRecipe> {
     type: 'Pause',
 };
 
-export function isPauseEntity(entity: ExperimentEntity): entity is PauseEntity {
+export function isPauseEntity(entity: ExperimentEntity<Recipe>): entity is PauseEntity {
     return entity.type === 'Pause';
 }
 
@@ -18,6 +20,7 @@ export function defaultPauseEntity(id?: EntityId): PauseEntity {
     return {
         type: 'Pause',
         id,
+        recipe: defaultPauseRecipe(),
         enabled: true,
         measuring: false,
     };
@@ -59,7 +62,7 @@ const pauseSlice = createSlice({
     }
 });
 
-interface PauseAddedPayload extends ExperimentAddedPayload {
+interface PauseAddedPayload extends ExperimentAddedPayload<PauseRecipe> {
     experimentEntity: PauseEntity
 }
 

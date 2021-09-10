@@ -1,5 +1,6 @@
 import { createStyles, Grid, makeStyles, Theme, Typography, useTheme } from "@material-ui/core"
 import { EntityId } from "@reduxjs/toolkit"
+import { Recipe } from "material-science-experiment-recipes/lib/recipe"
 import { useState } from "react"
 import { DragDropContext, Draggable, DraggableProvided, DraggableStateSnapshot, Droppable, DropResult } from "react-beautiful-dnd"
 import { useDispatch, useSelector } from "react-redux"
@@ -8,6 +9,8 @@ import { isKeithley2636Entity } from "../keithley-2636/keithley2636Slice"
 import { Keithley2636Tab } from "../keithley-2636/Keithley2636Tab"
 import { isPauseEntity } from "../pause/pauseSlice"
 import { PauseTab } from "../pause/PauseTab"
+import { isRandomNumberEntity } from "../random-number/randomNumberSlice"
+import { RandomNumberTab } from "../random-number/RandomNumberTab"
 import { selectExperimentsByIds } from "../util/selector"
 import { ExperimentEntity, experimentRemoved, selectSubsequenceById, subsequenceReordered } from "./subsequenceSlice"
 
@@ -24,7 +27,7 @@ export interface Props {
 }
 
 interface DraggableExperimentProps extends Props {
-    experiment: ExperimentEntity,
+    experiment: ExperimentEntity<Recipe>,
     provided: DraggableProvided,
     snapshot: DraggableStateSnapshot
 }
@@ -72,6 +75,17 @@ const DraggableExperiment: React.FC<DraggableExperimentProps> = ({
             }
             {isKeithley2636Entity(experiment) &&
                 <Keithley2636Tab
+                    remove={() => dispatch(experimentRemoved({
+                        subsequenceId: id,
+                        experimentId: experiment.id
+                    }))}
+                    open={open}
+                    setOpen={setOpen}
+                    entity={experiment}
+                />
+            }
+            {isRandomNumberEntity(experiment) &&
+                <RandomNumberTab
                     remove={() => dispatch(experimentRemoved({
                         subsequenceId: id,
                         experimentId: experiment.id

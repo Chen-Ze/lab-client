@@ -1,7 +1,8 @@
-import { createStyles, FormControl, IconButton, InputAdornment, makeStyles, MenuItem, OutlinedInput, Select, Theme, useTheme } from '@material-ui/core';
+import { Box, createStyles, FormControl, IconButton, InputAdornment, makeStyles, MenuItem, OutlinedInput, Select, Theme, Tooltip, useTheme } from '@material-ui/core';
 import AddIcon from '@material-ui/icons/Add';
 import RemoveIcon from '@material-ui/icons/Remove';
-import { DataGrid, GridToolbarContainer } from '@mui/x-data-grid';
+import { DataGrid, GridToolbarColumnsButton, GridToolbarContainer, GridToolbarDensitySelector, GridToolbarExport, GridToolbarFilterButton } from '@mui/x-data-grid';
+import dateFormat from 'dateformat';
 import { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { DockTabProps } from '../dock/dock-properties';
@@ -23,6 +24,21 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     monospace: {
         fontFamily: "Courier New, monospace",
     },
+    toolBarContainer: {
+        display: "flex",
+        overflowX: "auto",
+        overflowY: "hidden",
+        "& > *": {
+            flexShrink: 0
+        },
+        "&::-webkit-scrollbar": {
+            display: "none",
+        },
+        scrollbarWidth: "none",  /* Firefox */
+    },
+    toolBarTools: {
+        flexShrink: 0
+    }
 }));
 
 function EditToolbar() {
@@ -42,6 +58,7 @@ function EditToolbar() {
             dispatch(columnAdded({
                 field: newColumnName.trim(),
                 headerClassName: 'data-grid-monospace',
+                cellClassName: 'data-grid-monospace',
                 headerAlign: 'center',
                 width: 200
             }));
@@ -57,7 +74,7 @@ function EditToolbar() {
     };
 
     return (
-        <GridToolbarContainer >
+        <GridToolbarContainer className={classes.toolBarContainer} >
             <FormControl variant="outlined" margin="dense" className={classes.toolBarControl} >
                 <OutlinedInput
                     value={newColumnName}
@@ -113,6 +130,16 @@ function EditToolbar() {
                     })}
                 </Select>
             </FormControl>
+            <Box className={classes.toolBarTools} >
+                <Tooltip title="Warning: Hidden columns will NOT be exported." aria-label="export">
+                    <GridToolbarExport csvOptions={{
+                        fileName: `${dateFormat(new Date(), 'yyyy-mm-dd-HH-MM-ss')}`
+                    }} />
+                </Tooltip>
+                <GridToolbarColumnsButton />
+                <GridToolbarFilterButton />
+                <GridToolbarDensitySelector />
+            </Box>
         </GridToolbarContainer>
     );
 }
@@ -128,27 +155,6 @@ export const DataGridTab: React.FC<Props> = (props) => {
     const columns = useSelector(selectDataGridColumns);
     const rows = useSelector(selectDataGridRows);
 
-    /* const { data } = useDemoData({
-        dataSet: 'Commodity',
-        rowLength: 100000,
-        editable: true,
-    });
-
-    return (
-        <div style={{ height: "100%", width: "100%" }}>
-            <DataGrid
-                {...data}
-                loading={data.rows.length === 0}
-                rowHeight={38}
-                checkboxSelection
-                disableSelectionOnClick
-                classes={{
-                    root: classes.root
-                }}
-            />
-        </div>
-    );
-    */
     return (
         <div style={{ height: "100%", width: "100%" }}>
             <DataGrid

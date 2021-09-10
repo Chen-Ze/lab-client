@@ -3,11 +3,14 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import FlareIcon from '@material-ui/icons/Flare';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import SpeedIcon from '@material-ui/icons/Speed';
+import HelpIcon from '@material-ui/icons/Help';
+import FunctionsIcon from '@material-ui/icons/Functions';
 import clsx from "clsx";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { defaultKeithley2636Entity, keithley2636AddedCreator } from "../../keithley-2636/keithley2636Slice";
 import { defaultPauseEntity, pauseAddedCreator } from "../../pause/pauseSlice";
+import { defaultRandomNumberEntity, randomNumberAddedCreator } from "../../random-number/randomNumberSlice";
 import { Props } from "../SubsequenceTab";
 
 
@@ -106,11 +109,29 @@ export const AddExperiment: React.FC<Props> = (props) => {
                                     <SpeedIcon />
                                 </IconButton>
                             </Tooltip>
+                            <Tooltip title="Random Number" aria-label="add random number" >
+                                <IconButton onClick={() => {
+                                    dispatch(randomNumberAddedCreator({
+                                        subsequenceId: props.id,
+                                        experimentEntity: defaultRandomNumberEntity()
+                                    }));
+                                    setOpen(false);
+                                }}>
+                                    <HelpIcon />
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title="LightField" aria-label="LightField" >
                                 <IconButton onClick={() => {
                                     setOpen(false);
                                 }}>
                                     <FlareIcon />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Calculator" aria-label="calculator" >
+                                <IconButton onClick={() => {
+                                    setOpen(false);
+                                }}>
+                                    <FunctionsIcon />
                                 </IconButton>
                             </Tooltip>
                         </Box>

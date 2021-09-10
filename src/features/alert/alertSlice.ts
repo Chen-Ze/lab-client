@@ -45,8 +45,8 @@ export const {
 
 export default alertSlice.reducer;
 
-const subsequenceSelectors = alertAdapter.getSelectors((state: RootState) => state.alert);
+const alertSelectors = alertAdapter.getSelectors((state: RootState) => state.alert);
 
 export const {
     selectAll: selectAllAlerts
-} = subsequenceSelectors;
+} = alertSelectors;

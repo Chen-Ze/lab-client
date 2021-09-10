@@ -1,6 +1,6 @@
 import { createStyles, FormControl, FormControlLabel, Grid, Switch, Theme, Typography, useTheme, makeStyles } from '@material-ui/core';
+import { FixedChannelRecipe, SMUMode, SMURecipe, SweepChannelRecipe } from 'material-science-experiment-recipes/lib/keithley-2636-simple-recipe';
 import React from 'react';
-import { FixedChannelRecipe, SMUMode, SMURecipe, SweepChannelRecipe } from '../keithley2636Slice';
 import { CircuitInput } from './CircuitInput';
 import { ModeSelect } from './ModeSelect';
 

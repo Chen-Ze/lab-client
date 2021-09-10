@@ -14,7 +14,9 @@ import { fetchKeithley2636 } from './features/monitor/monitorSlice';
 import { fetchAvailableAddresses } from './features/setting/settingSlice';
 import { commanderSubsequenceAdded } from './features/subsequence/subsequenceSlice';
 import { BottomBar } from './widget/BottomBar';
+import { ExperimentDataListener } from './widget/ExperimentDataListener';
 import { Topbar } from './widget/Topbar';
+import { AvailableExperimentsListener } from './widget/AvailableExperimentsListener';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -94,9 +96,9 @@ const AppContent: React.FC<Props> = (props) => {
                 <Grid container className={classes.mainLeftRightGrid} >
                     <Grid item xs={6} className={clsx(
                         classes.leftCell, {
-                            [classes.mainLeftRightGridColumn]: !leftDockNonEmpty,
-                            [classes.mainLeftRightGridTabColumn]: leftDockNonEmpty
-                        })}
+                        [classes.mainLeftRightGridColumn]: !leftDockNonEmpty,
+                        [classes.mainLeftRightGridTabColumn]: leftDockNonEmpty
+                    })}
                     >
                         {
                             leftDockNonEmpty && <Dock position={TabPosition.Left} />
@@ -107,9 +109,9 @@ const AppContent: React.FC<Props> = (props) => {
                     </Grid>
                     <Grid item xs={6} className={clsx(
                         classes.rightCell, {
-                            [classes.mainLeftRightGridColumn]: !rightDockNonEmpty,
-                            [classes.mainLeftRightGridTabColumn]: rightDockNonEmpty
-                        })}
+                        [classes.mainLeftRightGridColumn]: !rightDockNonEmpty,
+                        [classes.mainLeftRightGridTabColumn]: rightDockNonEmpty
+                    })}
                     >
                         {
                             rightDockNonEmpty && <Dock position={TabPosition.Right} />
@@ -171,7 +173,13 @@ function App() {
         dispatchAddresses();
     });
 
-    return <ThemedApp />;
+    return (
+        <>
+            <ThemedApp />
+            <AvailableExperimentsListener />
+            <ExperimentDataListener />
+        </>
+    );
 }
 
 export default App;

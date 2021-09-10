@@ -4,6 +4,7 @@ import DvrIcon from '@material-ui/icons/Dvr';
 import TableChartIcon from '@material-ui/icons/TableChart';
 import CodeIcon from '@material-ui/icons/Code';
 import TimelineIcon from '@material-ui/icons/Timeline';
+import WarningIcon from '@material-ui/icons/Warning';
 import { useDispatch } from "react-redux";
 import { toggleTab } from "../features/dock/dockSlice";
 import { TabName } from "../features/dock/dock-properties";
@@ -76,6 +77,13 @@ export const BottomBar: React.FC<Props> = (props) => {
 
                         </Grid>
                     </Tooltip>
+                    <Tooltip title="Plots" aria-label="plot">
+                        <Grid item xs={2} sm={1} className={classes.iconWrapper}
+                            onClick={(e) => dispatch(toggleTab(TabName.Plot))}
+                        >
+                            <TimelineIcon />
+                        </Grid>
+                    </Tooltip>
                     <Tooltip title="Sequence" aria-label="sequence">
                         <Grid item xs={2} sm={1} className={classes.iconWrapper}
                             onClick={(e) => dispatch(toggleTab(TabName.Sequence))}
@@ -83,11 +91,11 @@ export const BottomBar: React.FC<Props> = (props) => {
                             <CodeIcon />
                         </Grid>
                     </Tooltip>
-                    <Tooltip title="Plot" aria-label="plot">
+                    <Tooltip title="Alerts" aria-label="alert">
                         <Grid item xs={2} sm={1} className={classes.iconWrapper}
-                            onClick={(e) => dispatch(toggleTab(TabName.Plot))}
+                            onClick={(e) => dispatch(toggleTab(TabName.Alert))}
                         >
-                            <TimelineIcon />
+                            <WarningIcon />
                         </Grid>
                     </Tooltip>
                 </Grid>

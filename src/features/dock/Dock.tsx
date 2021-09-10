@@ -13,14 +13,16 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         height: "100%",
         borderTop: `thin solid ${theme.palette.text.hint}`,
         display: "flex",
-        flexDirection: "column"
+        flexDirection: "column",
+        position: "relative"
     },
     verticalBox: {
         display: "flex",
         flexDirection: "column",
         height: "100%",
         maxHeight: "100%",
-        minHeight: "100%"
+        minHeight: "100%",
+        position: "relative"
     }
 }));
 

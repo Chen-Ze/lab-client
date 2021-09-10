@@ -12,7 +12,8 @@ export enum TabName {
     Monitor  = "Monitor",
     Data     = "Data",
     Sequence = "Sequence",
-    Plot     = "Plot"
+    Plot     = "Plots",
+    Alert    = "Alerts"
 }
 
 export interface DockProps {

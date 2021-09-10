@@ -1,4 +1,4 @@
-import { alpha, createStyles, Theme } from "@material-ui/core";
+import { alpha, createStyles, PaletteType, Theme } from "@material-ui/core";
 
 export const tabStyles = (theme: Theme) => createStyles({
     '@keyframes blinker': {
@@ -39,4 +39,13 @@ export const tabStyles = (theme: Theme) => createStyles({
         position: "relative",
     },
 });
+
+export function revertPaletteType(type: PaletteType) {
+    switch (type) {
+        case 'dark':
+            return 'light';
+        case 'light':
+            return 'dark';
+    }
+}
 

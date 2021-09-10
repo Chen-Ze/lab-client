@@ -6,10 +6,14 @@ import Brightness4Icon from '@material-ui/icons/Brightness4';
 import BrightnessHighIcon from '@material-ui/icons/BrightnessHigh';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import PlayArrowIcon from '@material-ui/icons/PlayArrow';
+import axios from 'axios';
 import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { currentExperimentIdSet, selectAvailableExperimentIdList, selectCurrentExperimentId } from '../features/experiments/experimentsSlice';
 import { keithley2636AddressSet, selectSetting } from '../features/setting/settingSlice';
+import { compileCommander } from '../features/util/selector';
+import { revertPaletteType } from '../features/util/styles';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -42,11 +46,53 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     monospace: {
         fontFamily: "Courier New, monospace",
     },
+    toolbar: {
+        display: "flex",
+        justifyContent: "center",
+        flexWrap: "wrap",
+        "& > *": {
+            flexShrink: 0
+        }
+    },
 }));
+
+function ExecutionButton() {
+    const theme = useTheme();
+    const classes = useStyles(theme);
+    const dispatch = useDispatch();
+
+    const compiled = useSelector(compileCommander);
+
+    const execute = async () => {
+        const id = (await axios.post('/server/new-experiment', JSON.stringify(compiled), {
+            headers: { "Content-Type": "application/json" }
+        })).data.id;
+        dispatch(currentExperimentIdSet(id));
+    };
+
+    return (
+        <IconButton onClick={execute} >
+            <PlayArrowIcon className={classes.start} fontSize="large" />
+        </IconButton>
+    );
+}
 
 interface Props {
     paletteType: PaletteType,
     setPaletteType: (type: PaletteType) => void,
+}
+
+function experimentStatusToColor(status: string, theme: Theme) {
+    switch (status) {
+        case 'Created':
+            return theme.palette.secondary[revertPaletteType(theme.palette.type)];
+        case 'Started':
+            return theme.palette.success[revertPaletteType(theme.palette.type)];
+        case 'Terminated':
+            return theme.palette.primary[revertPaletteType(theme.palette.type)];
+        default:
+            return theme.palette.secondary[revertPaletteType(theme.palette.type)];
+    }
 }
 
 export const Topbar: React.FC<Props> = (props) => {
@@ -55,6 +101,8 @@ export const Topbar: React.FC<Props> = (props) => {
     const dispatch = useDispatch();
 
     const setting = useSelector(selectSetting);
+    const availableExperimentIdList = useSelector(selectAvailableExperimentIdList);
+    const currentExperimentId = useSelector(selectCurrentExperimentId);
 
     const [expanded, setExpanded] = useState(false);
 
@@ -85,13 +133,11 @@ export const Topbar: React.FC<Props> = (props) => {
                     </IconButton>}
                 </FormControl>
                 <FormControl variant="outlined" >
-                    <IconButton onClick={(e) => { }} >
-                        <PlayArrowIcon className={classes.start} fontSize="large" />
-                    </IconButton>
+                    <ExecutionButton />
                 </FormControl>
             </Toolbar>
             <Collapse in={expanded} timeout="auto" >
-                <Toolbar>
+                <Toolbar className={classes.toolbar} >
                     <FormControl className={classes.select} variant="outlined" >
                         <InputLabel>Keithley 2636 Address</InputLabel>
                         <Select
@@ -105,6 +151,28 @@ export const Topbar: React.FC<Props> = (props) => {
                                 setting.availableAddresses.map(address => (
                                     <MenuItem key={address} value={address} className={classes.monospace} >
                                         {address}
+                                    </MenuItem>
+                                ))
+                            }
+                        </Select>
+                    </FormControl>
+                    <FormControl className={classes.select} variant="outlined" >
+                        <InputLabel>Watch Experiment</InputLabel>
+                        <Select
+                            value={availableExperimentIdList.map(item => item.id).includes(currentExperimentId) ? currentExperimentId : ''}
+                            onChange={e => dispatch(currentExperimentIdSet(String(e.target.value)))}
+                            label="Watch Experiment"
+                            color="primary"
+                            className={classes.monospace}
+                        >
+                            {
+                                availableExperimentIdList.map(({id, status}) => (
+                                    <MenuItem key={id} value={id} className={classes.monospace}
+                                        style={{
+                                            color: experimentStatusToColor(status, theme)
+                                        }}
+                                    >
+                                        {`${id}`}
                                     </MenuItem>
                                 ))
                             }

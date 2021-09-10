@@ -25,7 +25,6 @@ const useStylesHorizontal = makeStyles((theme: Theme) => createStyles({
     monitorTabContainer: {
         padding: theme.spacing(0, 2),
         maxHeight: "100%",
-        overflow: "scroll",
         width: "100%",
     },
     monitorUnit: {

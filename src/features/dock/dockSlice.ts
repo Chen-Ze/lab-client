@@ -15,7 +15,8 @@ type DockState = {
     [TabName.Monitor]: TabPosition,
     [TabName.Data]: TabPosition,
     [TabName.Sequence]: TabPosition,
-    [TabName.Plot]: TabPosition
+    [TabName.Plot]: TabPosition,
+    [TabName.Alert]: TabPosition
 };
 
 const initialState: DockState = {
@@ -25,7 +26,8 @@ const initialState: DockState = {
     [TabName.Monitor]:  TabPosition.Bottom,
     [TabName.Data]:     TabPosition.Bottom,
     [TabName.Sequence]: TabPosition.Bottom,
-    [TabName.Plot]:     TabPosition.Bottom
+    [TabName.Plot]:     TabPosition.Bottom,
+    [TabName.Alert]:     TabPosition.Bottom
 };
 
 function openTabReducer(state: Draft<DockState>, tabName: TabName) {
