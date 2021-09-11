@@ -1,10 +1,11 @@
 import { Box, ClickAwayListener, createStyles, IconButton, makeStyles, Theme, Tooltip, useTheme } from "@material-ui/core";
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import Fab from '@material-ui/core/Fab';
+import AddIcon from '@material-ui/icons/Add';
 import FlareIcon from '@material-ui/icons/Flare';
+import FunctionsIcon from '@material-ui/icons/Functions';
+import HelpIcon from '@material-ui/icons/Help';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
 import SpeedIcon from '@material-ui/icons/Speed';
-import HelpIcon from '@material-ui/icons/Help';
-import FunctionsIcon from '@material-ui/icons/Functions';
 import clsx from "clsx";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
@@ -26,6 +27,13 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     box: {
         display: "flex",
         justifyContent: "center",
+        alignItems: "center"
+    },
+    outerBox: {
+        height: "56px",
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
     },
     addButton: {
     },
@@ -67,15 +75,16 @@ export const AddExperiment: React.FC<Props> = (props) => {
     }
 
     return (
-        <Box className={clsx(classes.box)}>
+        <Box className={clsx(classes.outerBox)}>
             <Box className={clsx(classes.box)}>
                 {!open &&
-                    <IconButton className={classes.addButton}
+                    <Fab className={classes.addButton}
                         onClick={expand}
                         onMouseOver={expand}
+                        color="primary"
                     >
-                        <AddCircleOutlineIcon color="primary" />
-                    </IconButton>}
+                        <AddIcon />
+                    </Fab>}
                 {open &&
                     <ClickAwayListener
                         onClickAway={close}
