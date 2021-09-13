@@ -20,7 +20,12 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     barWrapper: {
         flexShrink: 1,
         overflowX: "scroll",
-    }
+        "-ms-overflow-style": "none",
+        "scrollbar-width": "none",
+        "&::-webkit-scrollbar": {
+            display: "none",
+        }
+    },
 }));
 
 interface Props {
