@@ -1,5 +1,5 @@
 import { createStyles, FormControl, FormControlLabel, Grid, Switch, Theme, Typography, useTheme, makeStyles } from '@material-ui/core';
-import { FixedChannelRecipe, SMUMode, SMURecipe, SweepChannelRecipe } from 'material-science-experiment-recipes/lib/keithley-2636-simple-recipe';
+import { FixedChannelRecipe, SMUMode, SMURecipe, SweepChannelRecipe } from 'material-science-experiment-recipes/lib/keithley-simple/smu-recipe';
 import React from 'react';
 import { CircuitInput } from './CircuitInput';
 import { ModeSelect } from './ModeSelect';
@@ -24,6 +24,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         [theme.breakpoints.only('sm')]: {
             justifyContent: "flex-end",
         },
+    },
+    centerMode: {
+        display: "flex",
+        justifyContent: "center",
     },
 }));
 
@@ -57,6 +61,16 @@ const FixedCurrentChannel: React.FC<FixedCurrentChannelProps> = (props) => {
                         onChange={(e) => props.handleChange('value', (e.target.value))}
                         label="Value"
                         unit="A"
+                    />
+                </FormControl>
+            </Grid>
+            <Grid item className={classes.item} xs={12}>
+                <FormControl variant="filled">
+                    <CircuitInput
+                        value={String(props.recipe.compliance) || ''}
+                        onChange={(e) => props.handleChange('compliance', (e.target.value))}
+                        label="Compliance"
+                        unit="V"
                     />
                 </FormControl>
             </Grid>
@@ -111,10 +125,30 @@ const SweepCurrentChannel: React.FC<SweepCurrentChannelProps> = (props) => {
             <Grid item className={classes.item} xs={12}>
                 <FormControl variant="filled">
                     <CircuitInput
+                        value={String(props.recipe.interval) || ''}
+                        onChange={(e) => props.handleChange('interval', (e.target.value))}
+                        label="Interval"
+                        unit="A"
+                    />
+                </FormControl>
+            </Grid>
+            <Grid item className={classes.item} xs={12}>
+                <FormControl variant="filled">
+                    <CircuitInput
                         value={String(props.recipe.step) || ''}
                         onChange={(e) => props.handleChange('step', (e.target.value))}
                         label="Step"
                         unit="A"
+                    />
+                </FormControl>
+            </Grid>
+            <Grid item className={classes.item} xs={12}>
+                <FormControl variant="filled">
+                    <CircuitInput
+                        value={String(props.recipe.compliance) || ''}
+                        onChange={(e) => props.handleChange('compliance', (e.target.value))}
+                        label="Compliance"
+                        unit="V"
                     />
                 </FormControl>
             </Grid>
@@ -153,6 +187,16 @@ const FixedVoltageChannel: React.FC<FixedVoltageChannelProps> = (props) => {
                         onChange={(e) => props.handleChange('value', (e.target.value))}
                         label="Value"
                         unit="V"
+                    />
+                </FormControl>
+            </Grid>
+            <Grid item className={classes.item} xs={12}>
+                <FormControl variant="filled">
+                    <CircuitInput
+                        value={String(props.recipe.compliance) || ''}
+                        onChange={(e) => props.handleChange('compliance', (e.target.value))}
+                        label="Compliance"
+                        unit="A"
                     />
                 </FormControl>
             </Grid>
@@ -207,10 +251,30 @@ const SweepVoltageChannel: React.FC<SweepVoltageChannelProps> = (props) => {
             <Grid item className={classes.item} xs={12}>
                 <FormControl variant="filled">
                     <CircuitInput
+                        value={String(props.recipe.interval) || ''}
+                        onChange={(e) => props.handleChange('interval', (e.target.value))}
+                        label="Interval"
+                        unit="V"
+                    />
+                </FormControl>
+            </Grid>
+            <Grid item className={classes.item} xs={12}>
+                <FormControl variant="filled">
+                    <CircuitInput
                         value={String(props.recipe.step) || ''}
                         onChange={(e) => props.handleChange('step', (e.target.value))}
                         label="Step"
                         unit="V"
+                    />
+                </FormControl>
+            </Grid>
+            <Grid item className={classes.item} xs={12}>
+                <FormControl variant="filled">
+                    <CircuitInput
+                        value={String(props.recipe.compliance) || ''}
+                        onChange={(e) => props.handleChange('compliance', (e.target.value))}
+                        label="Compliance"
+                        unit="A"
                     />
                 </FormControl>
             </Grid>
@@ -232,7 +296,7 @@ const SweepVoltageChannel: React.FC<SweepVoltageChannelProps> = (props) => {
 }
 
 interface ChannelProps {
-    title: String,
+    title?: String,
     recipe: SMURecipe,
     handleChange: (name: string, value: any) => void,
     setMode: (mode: SMUMode) => void,
@@ -262,14 +326,23 @@ export const Channel: React.FC<ChannelProps> = (props) => {
 
     return (
         <Grid container spacing={1} alignItems="center" justifyContent="center" >
-            <Grid item className={classes.title} xs={12} sm={3} md={4} lg={3}>
-                <Typography variant="h6" >
-                    {props.title}
-                </Typography>
-            </Grid>
-            <Grid item className={classes.mode} xs={12} sm={9} md={8} lg={9}>
-                <ModeSelect mode={props.recipe.smuMode} setMode={props.setMode} fixedModeOnly={props.fixedModeOnly} />
-            </Grid>
+            {props.title &&
+                <>
+                    <Grid item className={classes.title} xs={12} sm={3} md={4} lg={3}>
+                        <Typography variant="h6" >
+                            {props.title}
+                        </Typography>
+                    </Grid>
+                    <Grid item className={classes.mode} xs={12} sm={9} md={8} lg={9}>
+                        <ModeSelect mode={props.recipe.smuMode} setMode={props.setMode} fixedModeOnly={props.fixedModeOnly} />
+                    </Grid>
+                </>
+            }
+            {!props.title &&
+                <Grid item className={classes.centerMode} xs={12} >
+                    <ModeSelect mode={props.recipe.smuMode} setMode={props.setMode} fixedModeOnly={props.fixedModeOnly} />
+                </Grid>
+            }
             {channel()}
         </Grid>
     );

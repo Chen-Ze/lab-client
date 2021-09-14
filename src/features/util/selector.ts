@@ -7,13 +7,15 @@ import { selectKeithley2636ById } from "../keithley-2636/keithley2636Slice";
 import { selectPauseById } from "../pause/pauseSlice";
 import { selectRandomNumberById } from "../random-number/randomNumberSlice";
 import { selectSubsequenceById } from "../subsequence/subsequenceSlice";
+import { selectKeithley2400ById } from "../keithley-2400/keithley2400Slice";
 
 
 export const selectExperimentById = (state: RootState, id: EntityId) => {
     return (
         selectKeithley2636ById(state, id) ||
         selectPauseById(state, id) ||
-        selectRandomNumberById(state, id)
+        selectRandomNumberById(state, id) ||
+        selectKeithley2400ById(state, id)
     );
 }
 

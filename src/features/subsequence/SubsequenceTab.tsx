@@ -5,6 +5,8 @@ import { useState } from "react"
 import { DragDropContext, Draggable, DraggableProvided, DraggableStateSnapshot, Droppable, DropResult } from "react-beautiful-dnd"
 import { useDispatch, useSelector } from "react-redux"
 import { RootState } from "../../app/store"
+import { isKeithley2400Entity } from "../keithley-2400/keithley2400Slice"
+import { Keithley2400Tab } from "../keithley-2400/Keithley2400Tab"
 import { isKeithley2636Entity } from "../keithley-2636/keithley2636Slice"
 import { Keithley2636Tab } from "../keithley-2636/Keithley2636Tab"
 import { isPauseEntity } from "../pause/pauseSlice"
@@ -86,6 +88,17 @@ const DraggableExperiment: React.FC<DraggableExperimentProps> = ({
             }
             {isRandomNumberEntity(experiment) &&
                 <RandomNumberTab
+                    remove={() => dispatch(experimentRemoved({
+                        subsequenceId: id,
+                        experimentId: experiment.id
+                    }))}
+                    open={open}
+                    setOpen={setOpen}
+                    entity={experiment}
+                />
+            }
+            {isKeithley2400Entity(experiment) &&
+                <Keithley2400Tab
                     remove={() => dispatch(experimentRemoved({
                         subsequenceId: id,
                         experimentId: experiment.id

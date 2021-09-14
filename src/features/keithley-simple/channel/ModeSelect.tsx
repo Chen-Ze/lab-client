@@ -1,7 +1,7 @@
 import React from 'react';
 import { FormControl, InputLabel, MenuItem, Select, Theme } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/styles';
-import { SMUMode } from 'material-science-experiment-recipes/lib/keithley-2636-simple-recipe';
+import { SMUMode } from 'material-science-experiment-recipes/lib/keithley-simple/smu-recipe';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({

@@ -3,6 +3,9 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
+    "@fortawesome/fontawesome-svg-core": "^1.2.36",
+    "@fortawesome/free-solid-svg-icons": "^5.15.4",
+    "@fortawesome/react-fontawesome": "^0.1.15",
     "@kunukn/react-collapse": "^2.2.9",
     "@material-ui/core": "^4.12.3",
     "@material-ui/icons": "^4.11.2",
@@ -37,7 +40,7 @@
     "file-saver": "^2.0.5",
     "http-proxy-middleware": "^2.0.1",
     "luxon": "^2.0.2",
-    "material-science-experiment-recipes": "^1.0.15",
+    "material-science-experiment-recipes": "^1.0.20",
     "mathjs": "^9.4.4",
     "plotly.js": "^2.3.1",
     "plotly.js-basic-dist": "^2.3.1",

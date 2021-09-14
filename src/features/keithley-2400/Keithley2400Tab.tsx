@@ -1,18 +1,17 @@
 import { Box, Card, CardContent, createStyles, FormControl, Grid, InputAdornment, InputLabel, makeStyles, MenuItem, Select, TextField, Theme, Typography, useTheme } from '@material-ui/core';
 import clsx from 'clsx';
-import { isSweepChannelRecipe } from 'material-science-experiment-recipes/lib/keithley-simple/smu-recipe';
+import { getKeithley2400SimpleRecipeVariables } from 'material-science-experiment-recipes/lib/keithley-2400-simple-recipe';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { TabAction } from "../../widget/TabAction";
 import { TabCollapse } from "../../widget/TabCollapse";
+import { VariableTable } from '../../widget/VariableTable';
 import { InstrumentPrototype, selectInstrumentsByPrototype } from '../instruments/instrumentsSlice';
+import { Channel } from "../keithley-simple/channel/Channel";
 import { SubsequenceTab } from '../subsequence/SubsequenceTab';
 import { ExperimentTabProps } from '../util/props';
 import { tabStyles } from '../util/styles';
-import { Channel } from "../keithley-simple/channel/Channel";
-import { Keithley2636Entity, keithley2636RecipeUpdated, keithley2636SMUModeUpdated, keithley2636SMUUpdated, keithley2636Updated, keithley2636VariableChanged } from './keithley2636Slice';
-import { getKeithley2636SimpleRecipeVariables } from 'material-science-experiment-recipes/lib/keithley-2636-simple-recipe';
-import { VariableTable } from '../../widget/VariableTable';
+import { Keithley2400Entity, keithley2400RecipeUpdated, keithley2400SMUModeUpdated, keithley2400SMUUpdated, keithley2400Updated, keithley2400VariableChanged } from './keithley2400Slice';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -37,23 +36,23 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 }));
 
 interface Props extends ExperimentTabProps {
-    entity: Keithley2636Entity
+    entity: Keithley2400Entity
 }
 
-export const Keithley2636Tab: React.FC<Props> = (props) => {
+export const Keithley2400Tab: React.FC<Props> = (props) => {
     const theme = useTheme();
     const classes = useStyles(theme);
     const dispatch = useDispatch();
 
     const handleChange = (name: string, value: any) => {
-        dispatch(keithley2636Updated({
+        dispatch(keithley2400Updated({
             id: props.entity.id,
             name,
             value
         }));
     };
 
-    const instruments = useSelector((state: RootState) => selectInstrumentsByPrototype(state, InstrumentPrototype.Keithley2600));
+    const instruments = useSelector((state: RootState) => selectInstrumentsByPrototype(state, InstrumentPrototype.Keithley2400));
 
     return (
         <Card className={
@@ -68,14 +67,14 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
             <TabCollapse {...props} >
                 <CardContent>
                     <Typography variant="h5" >
-                        Keithley 2600 Simple
+                        Keithley 2400 Simple
                     </Typography>
                     <Box className={classes.mainControlBox} >
                         <FormControl className={classes.instrumentInput} variant="outlined" >
                             <InputLabel>Name</InputLabel>
                             <Select
                                 value={props.entity.recipe.name}
-                                onChange={e => dispatch(keithley2636RecipeUpdated({
+                                onChange={e => dispatch(keithley2400RecipeUpdated({
                                     id: props.entity.id,
                                     name: "name",
                                     value: String(e.target.value)
@@ -94,7 +93,7 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
                         </FormControl>
                         <TextField
                             value={props.entity.recipe.wait}
-                            onChange={(e) => dispatch(keithley2636RecipeUpdated({
+                            onChange={(e) => dispatch(keithley2400RecipeUpdated({
                                 id: props.entity.id,
                                 name: "wait",
                                 value: String(e.target.value)
@@ -108,7 +107,7 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
                         />
                         <TextField
                             value={props.entity.recipe.integrationTime}
-                            onChange={(e) => dispatch(keithley2636RecipeUpdated({
+                            onChange={(e) => dispatch(keithley2400RecipeUpdated({
                                 id: props.entity.id,
                                 name: "integrationTime",
                                 value: String(e.target.value)
@@ -122,37 +121,16 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
                         />
                     </Box>
                     <Grid container spacing={3} justifyContent="center" className={classes.channelGrid} >
-                        <Grid item xs={12} md={6} >
+                        <Grid item xs={12} >
                             <Channel
-                                title="SMU A"
-                                recipe={props.entity.recipe.smuARecipe}
-                                setMode={(mode) => dispatch(keithley2636SMUModeUpdated({
+                                recipe={props.entity.recipe.smuRecipe}
+                                setMode={(mode) => dispatch(keithley2400SMUModeUpdated({
                                     id: props.entity.id,
-                                    smu: "smuA",
                                     smuMode: mode
                                 }))}
-                                fixedModeOnly={isSweepChannelRecipe(props.entity.recipe.smuBRecipe)}
-                                handleChange={(name, value) => dispatch(keithley2636SMUUpdated({
+                                fixedModeOnly={false}
+                                handleChange={(name, value) => dispatch(keithley2400SMUUpdated({
                                     id: props.entity.id,
-                                    smu: "smuA",
-                                    name,
-                                    value
-                                }))}
-                            />
-                        </Grid>
-                        <Grid item xs={12} md={6} >
-                            <Channel
-                                title="SMU B"
-                                recipe={props.entity.recipe.smuBRecipe}
-                                setMode={(mode) => dispatch(keithley2636SMUModeUpdated({
-                                    id: props.entity.id,
-                                    smu: "smuB",
-                                    smuMode: mode
-                                }))}
-                                fixedModeOnly={isSweepChannelRecipe(props.entity.recipe.smuARecipe)}
-                                handleChange={(name, value) => dispatch(keithley2636SMUUpdated({
-                                    id: props.entity.id,
-                                    smu: "smuB",
                                     name,
                                     value
                                 }))}
@@ -161,8 +139,8 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
                     </Grid>
                     <VariableTable
                         id={props.entity.id}
-                        availableVariables={getKeithley2636SimpleRecipeVariables(props.entity.recipe)}
-                        variableActionCreator={keithley2636VariableChanged}
+                        availableVariables={getKeithley2400SimpleRecipeVariables(props.entity.recipe)}
+                        variableActionCreator={keithley2400VariableChanged}
                         recipe={props.entity.recipe}
                     />
                     <SubsequenceTab id={props.entity.subsequenceId} />

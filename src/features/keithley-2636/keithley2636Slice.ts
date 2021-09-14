@@ -1,10 +1,12 @@
 import { Action, createEntityAdapter, createSlice, EntityId, nanoid, PayloadAction } from "@reduxjs/toolkit";
-import { defaultChannelRecipe, defaultKeithley2636SimpleRecipe, Keithley2636SimpleRecipe, SMUMode } from "material-science-experiment-recipes/lib/keithley-2636-simple-recipe";
+import { defaultChannelRecipe, SMUMode } from "material-science-experiment-recipes/lib/keithley-simple/smu-recipe";
+import { defaultKeithley2636SimpleRecipe, Keithley2636SimpleRecipe } from "material-science-experiment-recipes/lib/keithley-2636-simple-recipe"
 import { Recipe } from "material-science-experiment-recipes/lib/recipe";
 import { Dispatch } from "react";
 import { RootState } from "../../app/store";
 import { sequenceImported } from "../sequence/sequenceSlice";
 import { experimentAdded, ExperimentAddedPayload, ExperimentEntity, subsequenceAdded } from "../subsequence/subsequenceSlice";
+import { handleVariableAction, VariablePayload } from "../util/variable";
 
 
 export interface Keithley2636Entity extends ExperimentEntity<Keithley2636SimpleRecipe> {
@@ -41,6 +43,12 @@ interface Keithley2636UpdatedPayload {
     value: any
 }
 
+interface Keithley2636RecipeUpdatedPayload {
+    id: EntityId,
+    name: string,
+    value: any
+}
+
 interface Keithley2636SMUUpdatedPayload {
     id: EntityId,
     smu: 'smuA' | 'smuB',
@@ -66,6 +74,15 @@ const keithley2636Slice = createSlice({
                     [name]: value
                 }
             });
+        },
+        keithley2636RecipeUpdated: (state, action: PayloadAction<Keithley2636RecipeUpdatedPayload>) => {
+            const {id, name, value} = action.payload;
+            const entity = state.entities[id];
+            if (!entity) return;
+            entity.recipe = {
+                ...entity.recipe,
+                [name]: value
+            }
         },
         keithley2636SMUUpdated: (state, action: PayloadAction<Keithley2636SMUUpdatedPayload>) => {
             const {id, smu, name, value} = action.payload;
@@ -99,6 +116,9 @@ const keithley2636Slice = createSlice({
                     break;
             }
         },
+        keithley2636VariableChanged: (state, action: PayloadAction<VariablePayload>) => {
+            handleVariableAction(state.entities[action.payload.id]?.recipe, action);
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(experimentAdded, (state, { payload: { experimentEntity } }) => {
@@ -123,13 +143,15 @@ export const keithley2636AddedCreator = (payload: Keithley2636AddedPayload) => (
     dispatch(experimentAdded({
         subsequenceId: payload.subsequenceId,
         experimentEntity: payload.experimentEntity
-    }))
+    }));
 }
 
 export const {
     keithley2636Updated,
+    keithley2636RecipeUpdated,
     keithley2636SMUUpdated,
     keithley2636SMUModeUpdated,
+    keithley2636VariableChanged
 } = keithley2636Slice.actions;
 
 export default keithley2636Slice.reducer;

@@ -11,7 +11,7 @@ import clsx from 'clsx';
 import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { currentExperimentIdSet, selectAvailableExperimentIdList, selectCurrentExperimentId } from '../features/experiments/experimentsSlice';
-import { keithley2636AddressSet, selectSetting } from '../features/setting/settingSlice';
+import { InstrumentsTab } from '../features/instruments/instrumentsTab';
 import { compileCommander } from '../features/util/selector';
 import { revertPaletteType } from '../features/util/styles';
 
@@ -54,6 +54,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
             flexShrink: 0
         }
     },
+    collapse: {
+        width: "100%"
+    }
 }));
 
 function ExecutionButton() {
@@ -100,7 +103,6 @@ export const Topbar: React.FC<Props> = (props) => {
     const classes = useStyles(theme);
     const dispatch = useDispatch();
 
-    const setting = useSelector(selectSetting);
     const availableExperimentIdList = useSelector(selectAvailableExperimentIdList);
     const currentExperimentId = useSelector(selectCurrentExperimentId);
 
@@ -136,26 +138,8 @@ export const Topbar: React.FC<Props> = (props) => {
                     <ExecutionButton />
                 </FormControl>
             </Toolbar>
-            <Collapse in={expanded} timeout="auto" >
+            <Collapse in={expanded} timeout="auto" className={classes.collapse} >
                 <Toolbar className={classes.toolbar} >
-                    <FormControl className={classes.select} variant="outlined" >
-                        <InputLabel>Keithley 2636 Address</InputLabel>
-                        <Select
-                            value={setting.keithley2636Address}
-                            onChange={e => dispatch(keithley2636AddressSet(String(e.target.value)))}
-                            label="Keithley 2636 Address"
-                            color="primary"
-                            className={classes.monospace}
-                        >
-                            {
-                                setting.availableAddresses.map(address => (
-                                    <MenuItem key={address} value={address} className={classes.monospace} >
-                                        {address}
-                                    </MenuItem>
-                                ))
-                            }
-                        </Select>
-                    </FormControl>
                     <FormControl className={classes.select} variant="outlined" >
                         <InputLabel>Watch Experiment</InputLabel>
                         <Select
@@ -179,6 +163,7 @@ export const Topbar: React.FC<Props> = (props) => {
                         </Select>
                     </FormControl>
                 </Toolbar>
+                <InstrumentsTab />
             </Collapse>
         </AppBar >
     );

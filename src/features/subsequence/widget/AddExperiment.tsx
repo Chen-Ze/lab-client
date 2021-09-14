@@ -1,14 +1,15 @@
+import { faCalculator, faDiceOne, faDiceTwo } from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, ClickAwayListener, createStyles, IconButton, makeStyles, Theme, Tooltip, useTheme } from "@material-ui/core";
 import Fab from '@material-ui/core/Fab';
 import AddIcon from '@material-ui/icons/Add';
 import FlareIcon from '@material-ui/icons/Flare';
-import FunctionsIcon from '@material-ui/icons/Functions';
 import HelpIcon from '@material-ui/icons/Help';
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
-import SpeedIcon from '@material-ui/icons/Speed';
 import clsx from "clsx";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
+import { defaultKeithley2400Entity, keithley2400AddedCreator } from "../../keithley-2400/keithley2400Slice";
 import { defaultKeithley2636Entity, keithley2636AddedCreator } from "../../keithley-2636/keithley2636Slice";
 import { defaultPauseEntity, pauseAddedCreator } from "../../pause/pauseSlice";
 import { defaultRandomNumberEntity, randomNumberAddedCreator } from "../../random-number/randomNumberSlice";
@@ -52,6 +53,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
         animationName: '$shrink',
         animationDuration: `${theme.transitions.duration.standard}ms`,
         animationTimingFunction: 'ease-in-out',
+    },
+    fontAwesomeWrapper: {
+        height: "48px",
+        width: "48px"
     }
 }));
 
@@ -107,26 +112,36 @@ export const AddExperiment: React.FC<Props> = (props) => {
                                     <PlayCircleOutlineIcon />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Keithley 2636" aria-label="add pause" >
-                                <IconButton onClick={() => {
-                                    dispatch(keithley2636AddedCreator({
-                                        subsequenceId: props.id,
-                                        experimentEntity: defaultKeithley2636Entity()
-                                    }));
-                                    setOpen(false);
-                                }}>
-                                    <SpeedIcon />
+                            <Tooltip title="Keithley 2400" aria-label="add Keithley 2400" >
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(keithley2400AddedCreator({
+                                            subsequenceId: props.id,
+                                            experimentEntity: defaultKeithley2400Entity()
+                                        }));
+                                        setOpen(false);
+                                    }}
+                                    classes={{
+                                        root: classes.fontAwesomeWrapper
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faDiceOne} size="sm" />
                                 </IconButton>
                             </Tooltip>
-                            <Tooltip title="Random Number" aria-label="add random number" >
-                                <IconButton onClick={() => {
-                                    dispatch(randomNumberAddedCreator({
-                                        subsequenceId: props.id,
-                                        experimentEntity: defaultRandomNumberEntity()
-                                    }));
-                                    setOpen(false);
-                                }}>
-                                    <HelpIcon />
+                            <Tooltip title="Keithley 2600" aria-label="add Keithley 2600" >
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(keithley2636AddedCreator({
+                                            subsequenceId: props.id,
+                                            experimentEntity: defaultKeithley2636Entity()
+                                        }));
+                                        setOpen(false);
+                                    }}
+                                    classes={{
+                                        root: classes.fontAwesomeWrapper
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faDiceTwo} size="sm" />
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="LightField" aria-label="LightField" >
@@ -137,10 +152,28 @@ export const AddExperiment: React.FC<Props> = (props) => {
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="Calculator" aria-label="calculator" >
-                                <IconButton onClick={() => {
-                                    setOpen(false);
-                                }}>
-                                    <FunctionsIcon />
+                                <IconButton
+                                    onClick={() => {
+                                        setOpen(false);
+                                    }}
+                                    classes={{
+                                        root: classes.fontAwesomeWrapper
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faCalculator} size="sm" />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Random Number" aria-label="add random number" >
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(randomNumberAddedCreator({
+                                            subsequenceId: props.id,
+                                            experimentEntity: defaultRandomNumberEntity()
+                                        }));
+                                        setOpen(false);
+                                    }}
+                                >
+                                    <HelpIcon />
                                 </IconButton>
                             </Tooltip>
                         </Box>

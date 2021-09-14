@@ -8,6 +8,7 @@ import { PlotState } from "../plot/plotSlice";
 import { RandomNumberState } from "../random-number/randomNumberSlice";
 import { SettingState } from "../setting/settingSlice";
 import { SubsequenceState } from "../subsequence/subsequenceSlice";
+import { Keithley2400State } from "../keithley-2400/keithley2400Slice";
 
 
 export interface SequenceDocument {
@@ -20,7 +21,8 @@ export interface SequenceDocument {
     dataGrid: {
         columns: GridColumns,
     },
-    plot: PlotState
+    plot: PlotState,
+    keithley2400: Keithley2400State,
 }
 
 type SequenceState = { };
@@ -51,6 +53,7 @@ export const selectSequenceState = (state: RootState) => ({
     dataGrid: {
         columns: state.dataGrid.columns
     },
-    plot: state.plot
+    plot: state.plot,
+    keithley2400: state.keithley2400
 } as SequenceDocument);
     

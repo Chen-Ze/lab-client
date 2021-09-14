@@ -23,6 +23,10 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     variableControl: {
         width: "15ch"
+    },
+    tableContainer: {
+        maxHeight: "360px",
+        overflowY: "auto"
     }
 }));
 
@@ -127,6 +131,9 @@ interface Props {
 }
 
 export const VariableTable: React.FC<Props> = (props) => {
+    const theme = useTheme();
+    const classes = useStyles(theme);
+
     const dispatch = useDispatch();
 
     if (props.availableVariables.private.length + props.availableVariables.public.length === 0) {
@@ -134,7 +141,7 @@ export const VariableTable: React.FC<Props> = (props) => {
     }
 
     return (
-        <TableContainer component={Paper} variant="outlined" >
+        <TableContainer component={Paper} variant="outlined" className={classes.tableContainer} >
             <Table aria-label="variable table" >
                 <TableBody>
                     {props.availableVariables.private.map((name) => (
