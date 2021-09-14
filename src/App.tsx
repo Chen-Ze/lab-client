@@ -10,7 +10,6 @@ import { CommanderTab } from './features/commander/CommanderTab';
 import { Dock } from './features/dock/Dock';
 import { TabPosition } from './features/dock/dock-properties';
 import { selectBottomDockNonEmpty, selectLeftDockNonEmpty, selectRightDockNonEmpty } from './features/dock/dockSlice';
-import { fetchKeithley2636 } from './features/monitor/monitorSlice';
 import { fetchAvailableAddresses } from './features/setting/settingSlice';
 import { commanderSubsequenceAdded } from './features/subsequence/subsequenceSlice';
 import { BottomBar } from './widget/BottomBar';
@@ -152,10 +151,6 @@ function ThemedApp() {
 
 function App() {
     const dispatch = useDispatch();
-    const dispatchMonitor = () => {
-        dispatch(fetchKeithley2636());
-        setTimeout(dispatchMonitor, 4000);
-    };
     const dispatchAddresses = () => {
         dispatch(fetchAvailableAddresses());
         setTimeout(dispatchAddresses, 2000);
@@ -169,7 +164,6 @@ function App() {
         // try to hide the address bar on mobile devices
         window.scrollTo(0, 1000);
 
-        dispatchMonitor();
         dispatchAddresses();
     });
 

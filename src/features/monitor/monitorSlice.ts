@@ -1,104 +1,111 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createEntityAdapter, createSlice, EntityId, nanoid } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
-import { lastElement, sleep } from "../util/util";
-import axios from 'axios';
+import { sequenceImported } from "../sequence/sequenceSlice";
+import { lastElement } from "../util/util";
+import { fetchKeithley2400SMU, fetchKeithley2600SMUA, fetchKeithley2600SMUB, MonitorPrototype, MonitorResponse, TimeStampedValue } from "./Monitors";
 
 
-const FETCH_DELAY = 500;
+interface MonitorEntity {
+    id: EntityId,
+    prototype: MonitorPrototype,
+    title: string,
+    responses: MonitorResponse[],
+    delay: number,
+    address: string
+}
 
-interface TimeStampNumber {
-    time: number,
-    value: number
-};
-
-type MonitorState = {
-    smuAVoltages: TimeStampNumber[],
-    smuACurrents: TimeStampNumber[],
-    smuBVoltages: TimeStampNumber[],
-    smuBCurrents: TimeStampNumber[]
-};
-
-const initialState: MonitorState = {
-    smuAVoltages: [],
-    smuACurrents: [],
-    smuBVoltages: [],
-    smuBCurrents: []
-};
-
-export const fetchKeithley2636 = createAsyncThunk('monitor/fetchKeithley2636', async () => {
-    const smuAVoltageResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
-    const smuAVoltageTime = Date.now();
-    await sleep(FETCH_DELAY);
-    const smuACurrentResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
-    const smuACurrentTime = Date.now();
-    await sleep(FETCH_DELAY);
-    const smuBVoltageResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
-    const smuBVoltageTime = Date.now();
-    await sleep(FETCH_DELAY);
-    const smuBCurrentResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
-    const smuBCurrentTime = Date.now();
-    await sleep(FETCH_DELAY);
+export function createMonitorEntity(prototype: MonitorPrototype, title: string, delay: number, address: string, id?: EntityId): MonitorEntity {
+    if (!id) id = nanoid();
     return {
-        smuAVoltage: {
-            time: smuAVoltageTime,
-            value: Number(smuAVoltageResponse.read)
-        },
-        smuACurrent: {
-            time: smuACurrentTime,
-            value: Number(smuACurrentResponse.read)
-        },
-        smuBVoltage: {
-            time: smuBVoltageTime,
-            value: Number(smuBVoltageResponse.read)
-        },
-        smuBCurrent: {
-            time: smuBCurrentTime,
-            value: Number(smuBCurrentResponse.read)
-        },
+        id,
+        prototype,
+        title,
+        delay,
+        address,
+        responses: []
     };
-});
+}
+
+const monitorAdapter = createEntityAdapter<MonitorEntity>();
+
+const initialState = monitorAdapter.getInitialState();
+
+export type MonitorState = typeof initialState;
+
+interface FetchMonitorParameters {
+    monitorPrototype: MonitorPrototype,
+    address: string,
+    id: EntityId,
+}
+
+export const fetchMonitor = createAsyncThunk<MonitorResponse, FetchMonitorParameters>('monitor/fetchMonitor',
+    async (parameters: FetchMonitorParameters) => {
+        const {monitorPrototype, id, address} = parameters;
+        switch (monitorPrototype) {
+            case MonitorPrototype.Keithley2600SMUA:
+                return await fetchKeithley2600SMUA(id, address);
+            case MonitorPrototype.Keithley2600SMUB:
+                return await fetchKeithley2600SMUB(id, address);
+            case MonitorPrototype.Keithley2400SMU:
+                return await fetchKeithley2400SMU(id, address);
+        }
+    }
+);
 
 const monitorSlice = createSlice({
     name: "monitor",
     initialState,
     reducers: {
+        monitorAdded: monitorAdapter.addOne,
+        monitorRemoved: monitorAdapter.removeOne
     },
     extraReducers: (builder) => {
-        builder.addCase(fetchKeithley2636.fulfilled, (state, { payload }) => {
-            state.smuAVoltages.push(payload.smuAVoltage);
-            state.smuACurrents.push(payload.smuACurrent);
-            state.smuBVoltages.push(payload.smuBVoltage);
-            state.smuBCurrents.push(payload.smuBCurrent);
+        builder.addCase(sequenceImported, (state, {payload}) => {
+            return payload.monitor;
+        }).addCase(fetchMonitor.fulfilled, (state, { payload }) => {
+            const { monitorId } = payload;
+            const entity = state.entities[monitorId];
+            if (!entity) return;
+            entity.responses.push(payload);
         });
     }
 });
 
-export const selectSMUAVoltages = (state: RootState) =>
-    state.monitor.smuAVoltages;
+const monitorSelectors = monitorAdapter.getSelectors((state: RootState) => state.monitor);
+const {
+    selectById,
+    selectAll
+} = monitorSelectors;
 
-export const selectLastSMUAVoltage = (state: RootState) =>
-    lastElement(state.monitor.smuAVoltages) || {time: NaN, value: NaN};
+export const selectResponses = (state: RootState, id: EntityId) =>
+    selectById(state, id)?.responses;
 
-export const selectSMUACurrents = (state: RootState) =>
-    state.monitor.smuACurrents;
+export const selectLastResponse = (state: RootState, id: EntityId) =>
+    lastElement(selectResponses(state, id));
 
-export const selectLastSMUACurrent = (state: RootState) =>
-    lastElement(state.monitor.smuACurrents) || {time: NaN, value: NaN};
-
-export const selectSMUBVoltages = (state: RootState) =>
-    state.monitor.smuBVoltages;
-
-export const selectLastSMUBVoltage = (state: RootState) =>
-    lastElement(state.monitor.smuBVoltages) || {time: NaN, value: NaN};
-
-export const selectSMUBCurrents = (state: RootState) =>
-    state.monitor.smuBCurrents;
-
-export const selectLastSMUBCurrent = (state: RootState) =>
-    lastElement(state.monitor.smuBCurrents) || {time: NaN, value: NaN};
-
-export type MonitorDataSelector = typeof selectSMUAVoltages;
-
-export type MonitorLastSelector = typeof selectLastSMUAVoltage;
+export const selectAllMonitorIdsTitlesAndPrototypes = (state: RootState) =>
+    selectAll(state).map(({id, title, prototype}) => ({
+        id,
+        title,
+        prototype
+    }));
 
 export default monitorSlice.reducer;
+
+export const {
+    monitorAdded,
+    monitorRemoved
+} = monitorSlice.actions;
+
+export type TimeStampedValuesSelector<T> = (state: RootState) => TimeStampedValue<T>[];
+export type TimeStampedValueSelector<T> = (state: RootState) => TimeStampedValue<T>;
+
+export const selectMonitorSequenceExport = (state: RootState): MonitorState => ({
+    ids: state.monitor.ids,
+    entities: Object.fromEntries(Object.entries(state.monitor.entities).map(
+        ([key, value]) => [key, {
+            ...(value as MonitorEntity),
+            responses: []
+        }]
+    ))
+})

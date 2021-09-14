@@ -6,9 +6,9 @@ import ZoomPlugin from 'chartjs-plugin-zoom';
 import { useCallback, useEffect, useState } from 'react';
 import { Chart, Line } from 'react-chartjs-2';
 import { useSelector } from 'react-redux';
-import { MonitorDataSelector } from '../monitorSlice';
 import Color from 'color';
 import { useTheme } from '@material-ui/core';
+import { TimeStampedValuesSelector } from '../monitorSlice';
 
 
 /**
@@ -34,7 +34,7 @@ Chart.register(StreamingPlugin);
 
 interface DataProps {
     setData: (data: Array<{ x: number, y: number }>) => void,
-    selector: MonitorDataSelector
+    selector: TimeStampedValuesSelector<number>
 }
 
 const MonitorTabData: React.FC<DataProps> = (props) => {
@@ -49,10 +49,11 @@ const MonitorTabData: React.FC<DataProps> = (props) => {
 }
 
 interface Props {
-    selector: MonitorDataSelector,
-    moreSelector?: MonitorDataSelector,
+    selector: TimeStampedValuesSelector<number>,
+    moreSelector?: TimeStampedValuesSelector<number>,
     label: string,
-    moreLabel?: string
+    moreLabel?: string,
+    title?: string
 }
 
 export const RealtimePlot: React.FC<Props> = (props) => {
@@ -106,6 +107,7 @@ export const RealtimePlot: React.FC<Props> = (props) => {
                 }}
                 options={{
                     responsive: true,
+                    aspectRatio: 1.5,
                     scales: {
                         x: {
                             type: 'realtime',
@@ -173,6 +175,10 @@ export const RealtimePlot: React.FC<Props> = (props) => {
                                     maxDuration: 86400000   // Max value of the duration option
                                 }
                             }
+                        },
+                        title: {
+                            display: !!props.title,
+                            text: props.title
                         }
                     }
                 }}

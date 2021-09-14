@@ -57,7 +57,7 @@ export const BottomBar: React.FC<Props> = (props) => {
         <AppBar position="relative" className={classes.appBar} >
             <Box className={classes.box} >
                 <Grid container spacing={0} alignItems="center" >
-                    <Tooltip title="Connected Successfully" aria-label="connected successfully">
+                    <Tooltip title="Be positive XD" aria-label="success">
                         <Grid item xs={2} sm={1} className={classes.status} >
                             <CheckIcon />
                         </Grid>

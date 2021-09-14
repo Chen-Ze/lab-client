@@ -1,17 +1,21 @@
 import { useSelector } from "react-redux";
 import { RootState } from "../../../app/store";
-import { MonitorLastSelector } from "../monitorSlice";
+import { TimeStampedValueSelector } from "../monitorSlice";
 import { ParameterTable } from "./ParameterTable";
 
 
-interface Entry {
-    selector: MonitorLastSelector,
+export interface Entry<T> {
+    selector: TimeStampedValueSelector<T>,
     title: string,
-    render: (data: ReturnType<MonitorLastSelector>) => any
+    render: (data: T) => unknown
+}
+
+export function makeRealtimeTableEntry<T>(entry: Entry<T>): Entry<T> {
+    return entry;
 }
 
 interface Props {
-    entries: Entry[]
+    entries: Entry<any>[]
 }
 
 export const RealtimeTable: React.FC<Props> = (props) => {
@@ -20,7 +24,7 @@ export const RealtimeTable: React.FC<Props> = (props) => {
     for (let i = 0; i < parameters.length; i++) {
         parameters[i] = {
             key: props.entries[i].title,
-            value: props.entries[i].render(allValues[i])
+            value: props.entries[i].render(allValues[i].value)
         };
     }
     return <ParameterTable {...{parameters}} />

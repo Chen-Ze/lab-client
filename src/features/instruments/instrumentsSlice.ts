@@ -86,7 +86,7 @@ const instrumentsSlice = createSlice({
     },
     extraReducers: (builder) => {
         builder.addCase(sequenceImported, (state, {payload}) => {
-            // return payload.plot;
+            return payload.instruments
         });
     }
 });

@@ -11,8 +11,10 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useFilePicker } from 'use-file-picker';
 import { DockTabProps, TabPosition } from "../dock/dock-properties";
-import { selectSequenceState, SequenceDocument, sequenceImported } from "./sequenceSlice";
-
+import { fetchMonitor } from "../monitor/monitorSlice";
+import { setImmediateInterval } from "../util/util";
+import { sequenceImported } from "./sequenceSlice";
+import { selectSequenceState, SequenceDocument } from "./SequenceDocument";
 
 
 loader.config({
@@ -112,9 +114,18 @@ export const SequenceTab: React.FC<Props> = (props) => {
     // Otherwise "Cannot update a component while rendering a different component"
     useEffect(() => {
         if (filesContent.length) {
-            const json = JSON.parse(filesContent[0].content);
+            const json = JSON.parse(filesContent[0].content) as SequenceDocument;
             clear();
-            dispatch(sequenceImported(json as SequenceDocument));
+            dispatch(sequenceImported(json));
+            Object.entries(json.monitor.entities).forEach(([key, value]) => {
+                if (!value) return;
+                const { id, delay, prototype, address } = value;
+                setImmediateInterval(() => dispatch(fetchMonitor({
+                    id,
+                    monitorPrototype: prototype,
+                    address
+                })), delay, String(id));
+            });
         }
     });
 
