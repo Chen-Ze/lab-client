@@ -14,6 +14,7 @@ import { currentExperimentIdSet, selectAvailableExperimentIdList, selectCurrentE
 import { InstrumentsTab } from '../features/instruments/instrumentsTab';
 import { compileCommander } from '../features/util/selector';
 import { revertPaletteType } from '../features/util/styles';
+import StopIcon from '@material-ui/icons/Stop';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -32,6 +33,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     start: {
         color: theme.palette.success[theme.palette.type]
+    },
+    stop: {
+        color: theme.palette.error[theme.palette.type]
     },
     expand: {
         transform: 'rotate(0deg)',
@@ -76,6 +80,22 @@ function ExecutionButton() {
     return (
         <IconButton onClick={execute} >
             <PlayArrowIcon className={classes.start} fontSize="large" />
+        </IconButton>
+    );
+}
+
+function StopButton() {
+    const theme = useTheme();
+    const classes = useStyles(theme);
+    const currentExperimentId = useSelector(selectCurrentExperimentId);
+
+    const stop = async () => {
+        axios.get(`/server/halt-experiment?id=${currentExperimentId}`);
+    };
+
+    return (
+        <IconButton onClick={stop} >
+            <StopIcon className={classes.stop} fontSize="large" />
         </IconButton>
     );
 }
@@ -135,7 +155,8 @@ export const Topbar: React.FC<Props> = (props) => {
                     </IconButton>}
                 </FormControl>
                 <FormControl variant="outlined" >
-                    <ExecutionButton />
+                    {!currentExperimentId && <ExecutionButton />}
+                    {currentExperimentId && <StopButton />}
                 </FormControl>
             </Toolbar>
             <Collapse in={expanded} timeout="auto" className={classes.collapse} >

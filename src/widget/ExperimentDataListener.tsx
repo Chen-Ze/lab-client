@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { rowsAdded } from '../features/data/dataGridSlice';
-import { selectCurrentExperimentId } from '../features/experiments/experimentsSlice';
+import { currentExperimentIdSet, selectCurrentExperimentId } from '../features/experiments/experimentsSlice';
 
 export const ExperimentDataListener: React.FC<{}> = (props) => {
     const dispatch = useDispatch();
@@ -24,6 +24,7 @@ export const ExperimentDataListener: React.FC<{}> = (props) => {
             dispatch(rowsAdded(rows));
             if (response.status === 'Terminated') {
                 watchExperiment.close();
+                dispatch(currentExperimentIdSet(''));
             }
         });
         return () => watchExperiment.close();

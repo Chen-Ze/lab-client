@@ -27,7 +27,7 @@ export function compileSubsequence(state: RootState, id?: EntityId): WrappedReci
     if (!id) return [];
     let experiments = selectExperimentsByIds(state, selectSubsequenceById(state, id)?.experiments);
     if (!experiments) return [];
-    return experiments.filter(Boolean).map((experiment) => ({
+    return experiments.filter(Boolean).filter(experiment => experiment?.enabled).map((experiment) => ({
         id: experiment!.id,
         recipe: experiment!.recipe,
         subsequence: compileSubsequence(state, experiment!.subsequenceId)
