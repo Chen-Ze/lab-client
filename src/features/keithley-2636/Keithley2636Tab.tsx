@@ -82,6 +82,10 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
                                 }))}
                                 label="Address"
                                 color="primary"
+                                error={
+                                    !props.entity.recipe.name ||
+                                    !instruments.map(({name}) =>name).includes(props.entity.recipe.name)
+                                }
                             >
                                 {
                                     instruments.map(({ id, name }) => (

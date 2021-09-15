@@ -49,9 +49,34 @@ export function isKeithley2400SMUMonitorResponse(response: MonitorResponse): res
 }
 
 export async function fetchKeithley2600SMUA(monitorId: EntityId, address: string): Promise<Keithley2600SMUAMonitorResponse> {
-    const smuAVoltageResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
+    // connection
+    await axios.get('/server/open-model', {
+        params: {
+            name: String(monitorId),
+            address,
+            model: "Model2600"
+        }
+    });
+
+    const smuAVoltageResponse = (
+        await axios.get('/server/query-model', {
+            params: {
+                name: String(monitorId),
+                task: "measure-smua-voltage",
+                model: "Model2600"
+            }
+        })
+    ).data;
     const smuAVoltageTime = Date.now();
-    const smuACurrentResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
+    const smuACurrentResponse = (
+        await axios.get('/server/query-model', {
+            params: {
+                name: String(monitorId),
+                task: "measure-smua-current",
+                model: "Model2600"
+            }
+        })
+    ).data;
     const smuACurrentTime = Date.now();
     return {
         type: MonitorPrototype.Keithley2600SMUA,
@@ -83,9 +108,34 @@ export function defaultKeithley2600SMUAResponse(monitorId: EntityId): Keithley26
 }
 
 export async function fetchKeithley2600SMUB(monitorId: EntityId, address: string): Promise<Keithley2600SMUBMonitorResponse> {
-    const smuBVoltageResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
+    // connection
+    await axios.get('/server/open-model', {
+        params: {
+            name: String(monitorId),
+            address,
+            model: "Model2600"
+        }
+    });
+
+    const smuBVoltageResponse = (
+        await axios.get('/server/query-model', {
+            params: {
+                name: String(monitorId),
+                task: "measure-smub-voltage",
+                model: "Model2600"
+            }
+        })
+    ).data;
     const smuBVoltageTime = Date.now();
-    const smuBCurrentResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
+    const smuBCurrentResponse = (
+        await axios.get('/server/query-model', {
+            params: {
+                name: String(monitorId),
+                task: "measure-smub-current",
+                model: "Model2600"
+            }
+        })
+    ).data;
     const smuBCurrentTime = Date.now();
     return {
         type: MonitorPrototype.Keithley2600SMUB,
@@ -117,9 +167,34 @@ export function defaultKeithley2600SMUBResponse(monitorId: EntityId): Keithley26
 }
 
 export async function fetchKeithley2400SMU(monitorId: EntityId, address: string): Promise<Keithley2400SMUMonitorResponse> {
-    const smuVoltageResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
+    // connection
+    await axios.get('/server/open-model', {
+        params: {
+            name: String(monitorId),
+            address,
+            model: "Model2400"
+        }
+    });
+
+    const smuVoltageResponse = (
+        await axios.get('/server/query-model', {
+            params: {
+                name: String(monitorId),
+                task: "measure-smu-voltage",
+                model: "Model2400"
+            }
+        })
+    ).data;
     const smuVoltageTime = Date.now();
-    const smuCurrentResponse = (await axios.get('/server/query?name=Keithley2636&command=print')).data;
+    const smuCurrentResponse = (
+        await axios.get('/server/query-model', {
+            params: {
+                name: String(monitorId),
+                task: "measure-smu-current",
+                model: "Model2400"
+            }
+        })
+    ).data;
     const smuCurrentTime = Date.now();
     return {
         type: MonitorPrototype.Keithley2400SMU,

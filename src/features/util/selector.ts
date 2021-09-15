@@ -1,5 +1,5 @@
 import { EntityId } from "@reduxjs/toolkit";
-import { DEFAULT_COMMANDER_RECIPE } from 'material-science-experiment-recipes/lib/commander-recipe';
+import { CommanderRecipe, DEFAULT_COMMANDER_RECIPE } from 'material-science-experiment-recipes/lib/commander-recipe';
 import { WrappedRecipe } from "material-science-experiment-recipes/lib/recipe";
 import { RootState } from "../../app/store";
 import { selectCommanderSubsequenceId } from "../commander/commanderSlice";
@@ -8,6 +8,8 @@ import { selectPauseById } from "../pause/pauseSlice";
 import { selectRandomNumberById } from "../random-number/randomNumberSlice";
 import { selectSubsequenceById } from "../subsequence/subsequenceSlice";
 import { selectKeithley2400ById } from "../keithley-2400/keithley2400Slice";
+import { selectSequenceState } from "../sequence/SequenceDocument";
+import { selectAllInstruments } from "../instruments/instrumentsSlice";
 
 
 export const selectExperimentById = (state: RootState, id: EntityId) => {
@@ -38,7 +40,15 @@ export function compileCommander(state: RootState): WrappedRecipe {
     const commanderSubsequenceId = selectCommanderSubsequenceId(state);
     return {
         id: commanderSubsequenceId,
-        recipe: DEFAULT_COMMANDER_RECIPE,
+        recipe: {
+            ...DEFAULT_COMMANDER_RECIPE,
+            store: selectSequenceState(state),
+            instruments: selectAllInstruments(state).map(({ name, address, prototype }) => ({
+                name,
+                address,
+                model: String(prototype)
+            }))
+        } as CommanderRecipe,
         subsequence: compileSubsequence(state, commanderSubsequenceId)
     }
 }
