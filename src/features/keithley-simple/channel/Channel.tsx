@@ -52,6 +52,8 @@ const FixedCurrentChannel: React.FC<FixedCurrentChannelProps> = (props) => {
     const theme = useTheme();
     const classes = useStyles(theme);
 
+    const warnTurnOff = Number(props.recipe.value) !== 0 && props.recipe.turnOffAfterDone;
+
     return (
         <Grid container spacing={1} justifyContent="center">
             <Grid item className={classes.item} xs={12}>
@@ -61,6 +63,8 @@ const FixedCurrentChannel: React.FC<FixedCurrentChannelProps> = (props) => {
                         onChange={(e) => props.handleChange('value', (e.target.value))}
                         label="Value"
                         unit="A"
+                        error={warnTurnOff}
+                        helperText={warnTurnOff ? "Set output to zero before turning off." : ''}
                     />
                 </FormControl>
             </Grid>
@@ -100,6 +104,8 @@ const SweepCurrentChannel: React.FC<SweepCurrentChannelProps> = (props) => {
     const theme = useTheme();
     const classes = useStyles(theme);
 
+    const warnTurnOff = Number(props.recipe.stop) !== 0 && props.recipe.turnOffAfterDone;
+
     return (
         <Grid container spacing={1} justifyContent="center">
             <Grid item className={classes.item} xs={12}>
@@ -119,6 +125,8 @@ const SweepCurrentChannel: React.FC<SweepCurrentChannelProps> = (props) => {
                         onChange={(e) => props.handleChange('stop', (e.target.value))}
                         label="End"
                         unit="A"
+                        error={warnTurnOff}
+                        helperText={warnTurnOff ? "Set output to zero before turning off." : ''}
                     />
                 </FormControl>
             </Grid>
@@ -178,6 +186,8 @@ const FixedVoltageChannel: React.FC<FixedVoltageChannelProps> = (props) => {
     const theme = useTheme();
     const classes = useStyles(theme);
 
+    const warnTurnOff = Number(props.recipe.value) !== 0 && props.recipe.turnOffAfterDone;
+
     return (
         <Grid container spacing={1} justifyContent="center">
             <Grid item className={classes.item} xs={12}>
@@ -187,6 +197,8 @@ const FixedVoltageChannel: React.FC<FixedVoltageChannelProps> = (props) => {
                         onChange={(e) => props.handleChange('value', (e.target.value))}
                         label="Value"
                         unit="V"
+                        error={warnTurnOff}
+                        helperText={warnTurnOff ? "Set output to zero before turning off." : ''}
                     />
                 </FormControl>
             </Grid>
@@ -226,6 +238,8 @@ const SweepVoltageChannel: React.FC<SweepVoltageChannelProps> = (props) => {
     const theme = useTheme();
     const classes = useStyles(theme);
 
+    const warnTurnOff = Number(props.recipe.stop) !== 0 && props.recipe.turnOffAfterDone;
+
     return (
         <Grid container spacing={1} justifyContent="center">
             <Grid item className={classes.item} xs={12}>
@@ -245,6 +259,8 @@ const SweepVoltageChannel: React.FC<SweepVoltageChannelProps> = (props) => {
                         onChange={(e) => props.handleChange('stop', (e.target.value))}
                         label="End"
                         unit="V"
+                        error={warnTurnOff}
+                        helperText={warnTurnOff ? "Set output to zero before turning off." : ''}
                     />
                 </FormControl>
             </Grid>

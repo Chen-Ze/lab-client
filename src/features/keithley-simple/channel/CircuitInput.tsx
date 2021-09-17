@@ -12,7 +12,9 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
 interface Props {
     value: String,
     label: String,
-    unit: String
+    unit: String,
+    error?: boolean,
+    helperText?: string,
     onChange: (e: React.ChangeEvent<HTMLTextAreaElement | HTMLInputElement>) => void,
 }
 
@@ -24,6 +26,8 @@ export const CircuitInput: React.FC<Props> = (props) => {
             value={props.value}
             onChange={props.onChange}
             label={props.label}
+            error={props.error}
+            helperText={props.helperText}
             InputProps={{
                 endAdornment: <InputAdornment position="end">{props.unit}</InputAdornment>,
                 className: classes.input
