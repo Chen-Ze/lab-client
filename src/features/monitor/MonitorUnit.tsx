@@ -42,6 +42,8 @@ interface Props {
     plotSelector: (state: RootState) => TimeStampedValue<number>[],
     plotMoreLabel?: string,
     plotMoreSelector?: (state: RootState) => TimeStampedValue<number>[],
+    plotTickFormat?: (value: number) => string,
+    plotMoreTickFormat?: (value: number) => string,
     entries: Entry<any>[],
     title?: string,
     id: EntityId
@@ -59,8 +61,10 @@ export const MonitorUnit: React.FC<Props> = (props: Props) => {
                 <RealtimePlot
                     label={props.plotLabel}
                     selector={props.plotSelector}
+                    tickFormat={props.plotTickFormat}
                     moreLabel={props.plotMoreLabel}
                     moreSelector={props.plotMoreSelector}
+                    moreTickFormat={props.plotMoreTickFormat}
                     title={props.title}
                 />
             </Box>

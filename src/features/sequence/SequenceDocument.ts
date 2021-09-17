@@ -10,6 +10,7 @@ import { PlotState } from "../plot/plotSlice";
 import { RandomNumberState } from "../random-number/randomNumberSlice";
 import { SettingState } from "../setting/settingSlice";
 import { SubsequenceState } from "../subsequence/subsequenceSlice";
+import { PythonSimpleState } from "../python-simple/pythonSimpleSlice";
 
 
 export interface SequenceDocument {
@@ -24,6 +25,7 @@ export interface SequenceDocument {
     };
     plot: PlotState;
     keithley2400: Keithley2400State;
+    pythonSimple: PythonSimpleState;
     monitor: MonitorState;
     instruments: InstrumentsState;
 }
@@ -40,6 +42,7 @@ export const selectSequenceState = (state: RootState): SequenceDocument => ({
     },
     plot: state.plot,
     keithley2400: state.keithley2400,
+    pythonSimple: state.pythonSimple,
     monitor: selectMonitorSequenceExport(state),
     instruments: state.instruments
 });

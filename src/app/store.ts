@@ -14,6 +14,7 @@ import experimentsReducer from '../features/experiments/experimentsSlice';
 import plotReducer from '../features/plot/plotSlice';
 import instrumentsReducer from '../features/instruments/instrumentsSlice';
 import keithley2400Reducer from '../features/keithley-2400/keithley2400Slice';
+import pythonSimpleReducer from '../features/python-simple/pythonSimpleSlice';
 
 
 export const store = configureStore({
@@ -33,6 +34,7 @@ export const store = configureStore({
         plot: plotReducer,
         instruments: instrumentsReducer,
         keithley2400: keithley2400Reducer,
+        pythonSimple: pythonSimpleReducer
     },
 });
 

@@ -13,6 +13,8 @@ import { isPauseEntity } from "../pause/pauseSlice"
 import { PauseTab } from "../pause/PauseTab"
 import { isRandomNumberEntity } from "../random-number/randomNumberSlice"
 import { RandomNumberTab } from "../random-number/RandomNumberTab"
+import { isPythonSimpleEntity } from "../python-simple/pythonSimpleSlice"
+import { PythonSimpleTab } from "../python-simple/PythonSimpleTab"
 import { selectExperimentsByIds } from "../util/selector"
 import { ExperimentEntity, experimentRemoved, selectSubsequenceById, subsequenceReordered } from "./subsequenceSlice"
 
@@ -99,6 +101,17 @@ const DraggableExperiment: React.FC<DraggableExperimentProps> = ({
             }
             {isKeithley2400Entity(experiment) &&
                 <Keithley2400Tab
+                    remove={() => dispatch(experimentRemoved({
+                        subsequenceId: id,
+                        experimentId: experiment.id
+                    }))}
+                    open={open}
+                    setOpen={setOpen}
+                    entity={experiment}
+                />
+            }
+            {isPythonSimpleEntity(experiment) &&
+                <PythonSimpleTab
                     remove={() => dispatch(experimentRemoved({
                         subsequenceId: id,
                         experimentId: experiment.id

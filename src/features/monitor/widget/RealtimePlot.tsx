@@ -53,6 +53,8 @@ interface Props {
     moreSelector?: TimeStampedValuesSelector<number>,
     label: string,
     moreLabel?: string,
+    tickFormat?: (value: number) => string,
+    moreTickFormat?: (value: number) => string,
     title?: string
 }
 
@@ -130,7 +132,8 @@ export const RealtimePlot: React.FC<Props> = (props) => {
                             display: true,
                             position: 'left',
                             ticks: {
-                                color: CHART_COLORS.red.mix(Color(theme.palette.text.primary), 0.6).rgb().string()
+                                color: CHART_COLORS.red.mix(Color(theme.palette.text.primary), 0.6).rgb().string(),
+                                callback: props.tickFormat || String
                             }
                         },
                         ...(props.moreSelector ? {
@@ -139,7 +142,8 @@ export const RealtimePlot: React.FC<Props> = (props) => {
                                 display: true,
                                 position: 'right',
                                 ticks: {
-                                    color: CHART_COLORS.blue.mix(Color(theme.palette.text.primary), 0.6).rgb().string()
+                                    color: CHART_COLORS.blue.mix(Color(theme.palette.text.primary), 0.6).rgb().string(),
+                                    callback: props.moreTickFormat || String
                                 },
                                 // grid line settings
                                 grid: {

@@ -215,6 +215,8 @@ export const MonitorTab: React.FC<Props> = (props) => {
                                             response => response.smuACurrent
                                         ) || []
                                     }
+                                    plotTickFormat={(val) => val.toExponential(3)}
+                                    plotMoreTickFormat={(val) => val.toExponential(3)}
                                     entries={[
                                         makeRealtimeTableEntry({
                                             title: "SMU A Voltage",
@@ -264,6 +266,8 @@ export const MonitorTab: React.FC<Props> = (props) => {
                                             response => response.smuBCurrent
                                         ) || []
                                     }
+                                    plotTickFormat={(val) => val.toExponential(3)}
+                                    plotMoreTickFormat={(val) => val.toExponential(3)}
                                     entries={[
                                         makeRealtimeTableEntry({
                                             title: "SMU B Voltage",
@@ -313,6 +317,8 @@ export const MonitorTab: React.FC<Props> = (props) => {
                                             response => response.smuCurrent
                                         ) || []
                                     }
+                                    plotTickFormat={(val) => val.toExponential(3)}
+                                    plotMoreTickFormat={(val) => val.toExponential(3)}
                                     entries={[
                                         makeRealtimeTableEntry({
                                             title: "Voltage",

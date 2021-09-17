@@ -1,4 +1,5 @@
 import { faCalculator, faDiceOne, faDiceTwo } from '@fortawesome/free-solid-svg-icons';
+import { faPython } from '@fortawesome/free-brands-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Box, ClickAwayListener, createStyles, IconButton, makeStyles, Theme, Tooltip, useTheme } from "@material-ui/core";
 import Fab from '@material-ui/core/Fab';
@@ -13,6 +14,7 @@ import { defaultKeithley2400Entity, keithley2400AddedCreator } from "../../keith
 import { defaultKeithley2636Entity, keithley2636AddedCreator } from "../../keithley-2636/keithley2636Slice";
 import { defaultPauseEntity, pauseAddedCreator } from "../../pause/pauseSlice";
 import { defaultRandomNumberEntity, randomNumberAddedCreator } from "../../random-number/randomNumberSlice";
+import { defaultPythonSimpleEntity, pythonSimpleAddedCreator } from "../../python-simple/pythonSimpleSlice";
 import { Props } from "../SubsequenceTab";
 
 
@@ -142,6 +144,22 @@ export const AddExperiment: React.FC<Props> = (props) => {
                                     }}
                                 >
                                     <FontAwesomeIcon icon={faDiceTwo} size="sm" />
+                                </IconButton>
+                            </Tooltip>
+                            <Tooltip title="Python" aria-label="Python" >
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(pythonSimpleAddedCreator({
+                                            subsequenceId: props.id,
+                                            experimentEntity: defaultPythonSimpleEntity()
+                                        }));
+                                        setOpen(false);
+                                    }}
+                                    classes={{
+                                        root: classes.fontAwesomeWrapper
+                                    }}
+                                >
+                                    <FontAwesomeIcon icon={faPython} size="sm" />
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="LightField" aria-label="LightField" >

@@ -122,11 +122,11 @@ The filenames currently follow the following conventions:
         },
         extraReducers: (builder) => {
             builder.addCase(experimentAdded, (state, { payload: { experimentEntity } }) => {
-                if (isNewExperiment(experimentEntity)) {
+                if (isNewExperimentEntity(experimentEntity)) {
                     newExperimentAdapter.addOne(state, experimentEntity);
                 }
             }).addCase(sequenceImported, (state, {payload}) => {
-                return payload.newExperiment;
+                return payload.newExperiment || state; // newExperiment not exported from old version
             });
         }
     });
@@ -174,7 +174,7 @@ The filenames currently follow the following conventions:
         },
     });
     ```
-6. Modify `/src/features/sequence/sequenceSlice.ts`:
+6. Modify `/src/features/sequence/sequenceDocument.ts`:
     1. Add the following import on the top:
     ```TypeScript
     import { NewExperimentState } from "../new-experiment/newExperimentSlice";
@@ -235,6 +235,7 @@ The filenames currently follow the following conventions:
 9. Add a tsx file under `/src/features/new-experiment`, with the name `NewExperimentTab.tsx`.
 10. Write and export in `NewExperimentTab.tsx` at least the following: (assuming that the experiment has children)
     ```TypeScript
+    import { Card, CardContent, createStyles, makeStyles, Theme, Typography, useTheme } from '@material-ui/core';
     import { useDispatch, useSelector } from 'react-redux';
     import { RootState } from '../../app/store';
     import { TabAction } from "../../widget/TabAction";
@@ -243,7 +244,7 @@ The filenames currently follow the following conventions:
     import { ExperimentTabProps } from '../util/props';
     import { tabStyles } from '../util/styles';
     import { Channel } from "../keithley-simple/channel/Channel";
-    import { NewExperimentEntity, newExperimentUpdated, newExperimentVariableChanged } from './keithley2636Slice';
+    import { NewExperimentEntity, newExperimentUpdated, newExperimentVariableChanged } from './newExperimentSlice';
     import { getNewExperimentRecipeVariables } from 'material-science-experiment-recipes/lib/new-experiment-recipe';
     import { VariableTable } from '../../widget/VariableTable';
 
