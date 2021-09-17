@@ -9,6 +9,7 @@ import { VariableTable } from '../../widget/VariableTable';
 import { InstrumentPrototype, selectInstrumentsByPrototype } from '../instruments/instrumentsSlice';
 import { Channel } from "../keithley-simple/channel/Channel";
 import { SubsequenceTab } from '../subsequence/SubsequenceTab';
+import { TabAccordion } from '../util/Accordion';
 import { ExperimentTabProps } from '../util/props';
 import { tabStyles } from '../util/styles';
 import { Keithley2400Entity, keithley2400RecipeUpdated, keithley2400SMUModeUpdated, keithley2400SMUUpdated, keithley2400Updated, keithley2400VariableChanged } from './keithley2400Slice';
@@ -69,6 +70,8 @@ export const Keithley2400Tab: React.FC<Props> = (props) => {
                     <Typography variant="h5" >
                         Keithley 2400 Simple
                     </Typography>
+                </CardContent>
+                <TabAccordion title="Parameters" >
                     <Box className={classes.mainControlBox} >
                         <FormControl className={classes.instrumentInput} variant="outlined" >
                             <InputLabel>Name</InputLabel>
@@ -83,7 +86,7 @@ export const Keithley2400Tab: React.FC<Props> = (props) => {
                                 color="primary"
                                 error={
                                     !props.entity.recipe.name ||
-                                    !instruments.map(({name}) =>name).includes(props.entity.recipe.name)
+                                    !instruments.map(({ name }) => name).includes(props.entity.recipe.name)
                                 }
                             >
                                 {
@@ -141,14 +144,18 @@ export const Keithley2400Tab: React.FC<Props> = (props) => {
                             />
                         </Grid>
                     </Grid>
+                </TabAccordion>
+                <TabAccordion title="Measurements" >
                     <VariableTable
                         id={props.entity.id}
                         availableVariables={getKeithley2400SimpleRecipeVariables(props.entity.recipe)}
                         variableActionCreator={keithley2400VariableChanged}
                         recipe={props.entity.recipe}
                     />
+                </TabAccordion>
+                <TabAccordion title="Subsequence" >
                     <SubsequenceTab id={props.entity.subsequenceId} />
-                </CardContent>
+                </TabAccordion>
                 <TabAction
                     {...props}
                     hasCollapse={true}

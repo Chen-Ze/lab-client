@@ -1,18 +1,19 @@
 import { Box, Card, CardContent, createStyles, FormControl, Grid, InputAdornment, InputLabel, makeStyles, MenuItem, Select, TextField, Theme, Typography, useTheme } from '@material-ui/core';
 import clsx from 'clsx';
+import { getKeithley2636SimpleRecipeVariables } from 'material-science-experiment-recipes/lib/keithley-2636-simple-recipe';
 import { isSweepChannelRecipe } from 'material-science-experiment-recipes/lib/keithley-simple/smu-recipe';
 import { useDispatch, useSelector } from 'react-redux';
 import { RootState } from '../../app/store';
 import { TabAction } from "../../widget/TabAction";
 import { TabCollapse } from "../../widget/TabCollapse";
+import { VariableTable } from '../../widget/VariableTable';
 import { InstrumentPrototype, selectInstrumentsByPrototype } from '../instruments/instrumentsSlice';
+import { Channel } from "../keithley-simple/channel/Channel";
 import { SubsequenceTab } from '../subsequence/SubsequenceTab';
+import { TabAccordion } from '../util/Accordion';
 import { ExperimentTabProps } from '../util/props';
 import { tabStyles } from '../util/styles';
-import { Channel } from "../keithley-simple/channel/Channel";
 import { Keithley2636Entity, keithley2636RecipeUpdated, keithley2636SMUModeUpdated, keithley2636SMUUpdated, keithley2636Updated, keithley2636VariableChanged } from './keithley2636Slice';
-import { getKeithley2636SimpleRecipeVariables } from 'material-science-experiment-recipes/lib/keithley-2636-simple-recipe';
-import { VariableTable } from '../../widget/VariableTable';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -70,6 +71,8 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
                     <Typography variant="h5" >
                         Keithley 2600 Simple
                     </Typography>
+                </CardContent>
+                <TabAccordion title="Parameters" >
                     <Box className={classes.mainControlBox} >
                         <FormControl className={classes.instrumentInput} variant="outlined" >
                             <InputLabel>Name</InputLabel>
@@ -84,7 +87,7 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
                                 color="primary"
                                 error={
                                     !props.entity.recipe.name ||
-                                    !instruments.map(({name}) =>name).includes(props.entity.recipe.name)
+                                    !instruments.map(({ name }) => name).includes(props.entity.recipe.name)
                                 }
                             >
                                 {
@@ -163,14 +166,18 @@ export const Keithley2636Tab: React.FC<Props> = (props) => {
                             />
                         </Grid>
                     </Grid>
+                </TabAccordion>
+                <TabAccordion title="Measurements" >
                     <VariableTable
                         id={props.entity.id}
                         availableVariables={getKeithley2636SimpleRecipeVariables(props.entity.recipe)}
                         variableActionCreator={keithley2636VariableChanged}
                         recipe={props.entity.recipe}
                     />
+                </TabAccordion>
+                <TabAccordion title="Subsequence" >
                     <SubsequenceTab id={props.entity.subsequenceId} />
-                </CardContent>
+                </TabAccordion>
                 <TabAction
                     {...props}
                     hasCollapse={true}
