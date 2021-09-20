@@ -1,9 +1,11 @@
 import { Card, CardContent, createStyles, IconButton, makeStyles, Theme, useTheme } from "@material-ui/core";
 import PlayCircleOutlineIcon from '@material-ui/icons/PlayCircleOutline';
+import axios from "axios";
 import clsx from "clsx";
 import { useEffect } from "react";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { TabAction } from "../../widget/TabAction";
+import { selectCurrentExperimentId } from "../experiments/experimentsSlice";
 import { ExperimentTabProps } from "../util/props";
 import { tabStyles } from "../util/styles";
 import { PauseEntity, pauseUpdated } from "./pauseSlice";
@@ -42,6 +44,8 @@ export const PauseTab: React.FC<Props> = (props) => {
     useEffect(() => {
         setOpen(false);
     });
+    
+    const currentExperimentId = useSelector(selectCurrentExperimentId);
 
     return (
         <Card className={
@@ -55,7 +59,7 @@ export const PauseTab: React.FC<Props> = (props) => {
         >
             <CardContent>
                 <div className={classes.playButton} >
-                    <IconButton onClick={() => { }} >
+                    <IconButton onClick={() => { axios.get(`/server/resume-experiment?id=${currentExperimentId}`); }} >
                         <PlayCircleOutlineIcon color="primary" className={classes.playButtonIcon} />
                     </IconButton>
                 </div>
