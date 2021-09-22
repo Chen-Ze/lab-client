@@ -11,6 +11,7 @@ import { selectKeithley2400ById } from "../keithley-2400/keithley2400Slice";
 import { selectSequenceState } from "../sequence/SequenceDocument";
 import { selectAllInstruments } from "../instruments/instrumentsSlice";
 import { selectPythonSimpleById } from "../python-simple/pythonSimpleSlice";
+import { selectLightFieldById } from "../light-field/lightFieldSlice";
 
 
 export const selectExperimentById = (state: RootState, id: EntityId) => {
@@ -19,7 +20,8 @@ export const selectExperimentById = (state: RootState, id: EntityId) => {
         selectPauseById(state, id) ||
         selectRandomNumberById(state, id) ||
         selectKeithley2400ById(state, id) ||
-        selectPythonSimpleById(state, id)
+        selectPythonSimpleById(state, id) ||
+        selectLightFieldById(state, id)
     );
 }
 

@@ -16,6 +16,7 @@ import { defaultPauseEntity, pauseAddedCreator } from "../../pause/pauseSlice";
 import { defaultRandomNumberEntity, randomNumberAddedCreator } from "../../random-number/randomNumberSlice";
 import { defaultPythonSimpleEntity, pythonSimpleAddedCreator } from "../../python-simple/pythonSimpleSlice";
 import { Props } from "../SubsequenceTab";
+import { defaultLightFieldEntity, lightFieldAddedCreator } from '../../light-field/lightFieldSlice';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -146,6 +147,22 @@ export const AddExperiment: React.FC<Props> = (props) => {
                                     <FontAwesomeIcon icon={faDiceTwo} size="sm" />
                                 </IconButton>
                             </Tooltip>
+                            <Tooltip title="LightField" aria-label="LightField" >
+                                <IconButton
+                                    onClick={() => {
+                                        dispatch(lightFieldAddedCreator({
+                                            subsequenceId: props.id,
+                                            experimentEntity: defaultLightFieldEntity()
+                                        }));
+                                        setOpen(false);
+                                    }}
+                                    classes={{
+                                        root: classes.fontAwesomeWrapper
+                                    }}
+                                >
+                                    <FlareIcon />
+                                </IconButton>
+                            </Tooltip>
                             <Tooltip title="Python" aria-label="Python" >
                                 <IconButton
                                     onClick={() => {
@@ -160,13 +177,6 @@ export const AddExperiment: React.FC<Props> = (props) => {
                                     }}
                                 >
                                     <FontAwesomeIcon icon={faPython} size="sm" />
-                                </IconButton>
-                            </Tooltip>
-                            <Tooltip title="LightField" aria-label="LightField" >
-                                <IconButton onClick={() => {
-                                    setOpen(false);
-                                }}>
-                                    <FlareIcon />
                                 </IconButton>
                             </Tooltip>
                             <Tooltip title="Calculator" aria-label="calculator" >

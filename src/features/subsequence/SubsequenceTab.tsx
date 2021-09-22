@@ -19,6 +19,8 @@ import { selectExperimentsByIds } from "../util/selector"
 import { ExperimentEntity, experimentRemoved, selectSubsequenceById, subsequenceReordered } from "./subsequenceSlice"
 
 import { AddExperiment } from "./widget/AddExperiment"
+import { isLightFieldEntity } from "../light-field/lightFieldSlice"
+import { LightFieldTab } from "../light-field/LightFieldTab"
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
     draggableList: {
@@ -112,6 +114,17 @@ const DraggableExperiment: React.FC<DraggableExperimentProps> = ({
             }
             {isPythonSimpleEntity(experiment) &&
                 <PythonSimpleTab
+                    remove={() => dispatch(experimentRemoved({
+                        subsequenceId: id,
+                        experimentId: experiment.id
+                    }))}
+                    open={open}
+                    setOpen={setOpen}
+                    entity={experiment}
+                />
+            }
+            {isLightFieldEntity(experiment) &&
+                <LightFieldTab
                     remove={() => dispatch(experimentRemoved({
                         subsequenceId: id,
                         experimentId: experiment.id

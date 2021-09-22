@@ -11,6 +11,7 @@ import { RandomNumberState } from "../random-number/randomNumberSlice";
 import { SettingState } from "../setting/settingSlice";
 import { SubsequenceState } from "../subsequence/subsequenceSlice";
 import { PythonSimpleState } from "../python-simple/pythonSimpleSlice";
+import { LightFieldState } from "../light-field/lightFieldSlice";
 
 
 export interface SequenceDocument {
@@ -28,6 +29,7 @@ export interface SequenceDocument {
     pythonSimple: PythonSimpleState;
     monitor: MonitorState;
     instruments: InstrumentsState;
+    lightField: LightFieldState;
 }
 
 export const selectSequenceState = (state: RootState): SequenceDocument => ({
@@ -44,5 +46,6 @@ export const selectSequenceState = (state: RootState): SequenceDocument => ({
     keithley2400: state.keithley2400,
     pythonSimple: state.pythonSimple,
     monitor: selectMonitorSequenceExport(state),
-    instruments: state.instruments
+    instruments: state.instruments,
+    lightField: state.lightField
 });

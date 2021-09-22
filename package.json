@@ -41,7 +41,7 @@
     "file-saver": "^2.0.5",
     "http-proxy-middleware": "^2.0.1",
     "luxon": "^2.0.2",
-    "material-science-experiment-recipes": "^1.0.22",
+    "material-science-experiment-recipes": "^1.0.25",
     "mathjs": "^9.4.4",
     "plotly.js": "^2.3.1",
     "plotly.js-basic-dist": "^2.3.1",
