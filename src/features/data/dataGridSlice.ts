@@ -59,5 +59,8 @@ export default dataGridSlice.reducer;
 export const selectDataGridColumns = (state: RootState) =>
     state.dataGrid.columns;
 
+export const selectDataGridColumnTitles = (state: RootState) =>
+    state.dataGrid.columns.map(column => column.field);
+
 export const selectDataGridRows = (state: RootState) =>
     state.dataGrid.rows;
