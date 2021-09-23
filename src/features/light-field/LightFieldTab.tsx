@@ -86,11 +86,6 @@ export const LightFieldTab: React.FC<Props> = (props) => {
                             </Select>
                         </FormControl>
                     </Box>
-                    {
-                        props.entity.recipe.task === LightFieldTask.SaveSpectrum && (
-                            <LightFieldSaveSpectrumBox {...props} />
-                        )
-                    }
                 </TabAccordion>
                 <TabAccordion title="Measurements" >
                     <VariableTable
