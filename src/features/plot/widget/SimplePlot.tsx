@@ -45,8 +45,8 @@ interface Props {
 }
 
 const evaluatableRow = (xDependencies: string[], yDependencies: string[], row: GridRowData) => (
-    xDependencies.every(variable => !!row[variable]) &&
-    yDependencies.every(variable => !!row[variable])
+    xDependencies.every(variable => (row[variable] !== undefined) && (!isNaN(row[variable]))) &&
+    yDependencies.every(variable => (row[variable] !== undefined) && (!isNaN(row[variable])))
 );
 
 function evaluateRows(plotEntity: PlotEntity, rows: GridRowData[]) {
