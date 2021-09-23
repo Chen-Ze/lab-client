@@ -16,6 +16,7 @@ import { BottomBar } from './widget/BottomBar';
 import { ExperimentDataListener } from './widget/ExperimentDataListener';
 import { Topbar } from './widget/Topbar';
 import { AvailableExperimentsListener } from './widget/AvailableExperimentsListener';
+import { ExperimentEndedDialog } from './widget/ExperimentEndedDialog';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -145,6 +146,7 @@ function ThemedApp() {
             <CssBaseline />
             <AppContent {...{ paletteType, setPaletteType }} />
             <AlertBar />
+            <ExperimentEndedDialog />
         </ThemeProvider>
     );
 }

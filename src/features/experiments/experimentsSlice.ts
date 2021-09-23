@@ -4,12 +4,14 @@ import { RootState } from "../../app/store";
 
 export type ExperimentsState = {
     availableExperimentIdList: Array<{id: string, status: string}>,
-    currentExperimentId: string
+    currentExperimentId: string,
+    experimentEndedDialogOpen: boolean,
 };
 
 const initialState: ExperimentsState = { 
     availableExperimentIdList: [],
-    currentExperimentId: ''
+    currentExperimentId: '',
+    experimentEndedDialogOpen: false
 };
 
 const experimentsSlice = createSlice({
@@ -21,7 +23,10 @@ const experimentsSlice = createSlice({
         },
         currentExperimentIdSet: (state, action: PayloadAction<string>) => {
             state.currentExperimentId = action.payload;
-        }
+        },
+        experimentEndedDialogOpenSet: (state, action: PayloadAction<boolean>) => {
+            state.experimentEndedDialogOpen = action.payload;
+        },
     },
 });
 
@@ -32,9 +37,13 @@ export const selectAvailableExperimentIdList = (state: RootState) =>
 export const selectCurrentExperimentId = (state: RootState) =>
     state.experiments.currentExperimentId;
 
+export const selectExperimentEndedDialogOpen = (state: RootState) =>
+    state.experiments.experimentEndedDialogOpen;
+
 export default experimentsSlice.reducer;
 
 export const {
     availableExperimentIdListUpdated,
-    currentExperimentIdSet
+    currentExperimentIdSet,
+    experimentEndedDialogOpenSet
 } = experimentsSlice.actions;
