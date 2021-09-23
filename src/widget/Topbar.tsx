@@ -1,4 +1,4 @@
-import { Collapse, FormControl, IconButton, InputLabel, MenuItem, PaletteType, Select } from '@material-ui/core';
+import { Collapse, FormControl, IconButton, InputLabel, MenuItem, PaletteType, Select, TextField } from '@material-ui/core';
 import AppBar from '@material-ui/core/AppBar';
 import { createStyles, makeStyles, Theme, useTheme } from '@material-ui/core/styles';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -15,6 +15,7 @@ import { InstrumentsTab } from '../features/instruments/instrumentsTab';
 import { compileCommander } from '../features/util/selector';
 import { revertPaletteType } from '../features/util/styles';
 import StopIcon from '@material-ui/icons/Stop';
+import { dataFileSet, selectDataFile } from '../features/setting/settingSlice';
 
 
 const useStyles = makeStyles((theme: Theme) => createStyles({
@@ -60,7 +61,11 @@ const useStyles = makeStyles((theme: Theme) => createStyles({
     },
     collapse: {
         width: "100%"
-    }
+    },
+    payloadInput: {
+        width: "100%",
+        maxWidth: "50ch"
+    },
 }));
 
 function ExecutionButton() {
@@ -126,11 +131,13 @@ export const Topbar: React.FC<Props> = (props) => {
     const availableExperimentIdList = useSelector(selectAvailableExperimentIdList);
     const currentExperimentId = useSelector(selectCurrentExperimentId);
 
-    const [expanded, setExpanded] = useState(false);
+    const [expanded, setExpanded] = useState(true);
 
     const handleExpandClick = () => {
         setExpanded(!expanded);
     };
+
+    const dataFile = useSelector(selectDataFile);
 
     return (
         <AppBar position="relative" className={classes.appBar} >
@@ -171,7 +178,7 @@ export const Topbar: React.FC<Props> = (props) => {
                             className={classes.monospace}
                         >
                             {
-                                availableExperimentIdList.map(({id, status}) => (
+                                availableExperimentIdList.map(({ id, status }) => (
                                     <MenuItem key={id} value={id} className={classes.monospace}
                                         style={{
                                             color: experimentStatusToColor(status, theme)
@@ -183,6 +190,19 @@ export const Topbar: React.FC<Props> = (props) => {
                             }
                         </Select>
                     </FormControl>
+                </Toolbar>
+                <Toolbar className={classes.toolbar} >
+                    <TextField
+                        value={dataFile}
+                        onChange={(e) => dispatch(dataFileSet(e.target.value))}
+                        label={"Save data to"}
+                        className={classes.payloadInput}
+                        InputProps={{
+                            className: classes.monospace
+                        }}
+                        error={!dataFile}
+                        helperText={!dataFile && "Empty data filename."}
+                    />
                 </Toolbar>
                 <InstrumentsTab />
             </Collapse>

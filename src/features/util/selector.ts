@@ -13,6 +13,7 @@ import { selectAllInstruments } from "../instruments/instrumentsSlice";
 import { selectPythonSimpleById } from "../python-simple/pythonSimpleSlice";
 import { selectLightFieldById } from "../light-field/lightFieldSlice";
 import { selectDataGridColumnTitles } from "../data/dataGridSlice";
+import { selectDataFile } from "../setting/settingSlice";
 
 
 export const selectExperimentById = (state: RootState, id: EntityId) => {
@@ -53,7 +54,8 @@ export function compileCommander(state: RootState): WrappedRecipe {
                 address,
                 model: String(prototype)
             })),
-            columns: selectDataGridColumnTitles(state)
+            columns: selectDataGridColumnTitles(state),
+            dataFile: selectDataFile(state)
         } as CommanderRecipe,
         subsequence: compileSubsequence(state, commanderSubsequenceId)
     }

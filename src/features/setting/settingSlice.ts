@@ -1,4 +1,4 @@
-import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
+import { createAsyncThunk, createSlice, PayloadAction } from "@reduxjs/toolkit";
 import axios from 'axios';
 import { RootState } from "../../app/store";
 import { sequenceImported } from "../sequence/sequenceSlice";
@@ -6,10 +6,12 @@ import { sequenceImported } from "../sequence/sequenceSlice";
 
 export type SettingState = {
     availableAddresses: string[],
+    dataFile: string
 };
 
 const initialState: SettingState = {
     availableAddresses: [],
+    dataFile: ''
 };
 
 export const fetchAvailableAddresses =
@@ -29,6 +31,9 @@ const settingSlice = createSlice({
     name: "setting",
     initialState,
     reducers: {
+        dataFileSet: (state, action: PayloadAction<string>) => {
+            state.dataFile = action.payload;
+        }
     },
     extraReducers: (builder) => {
         builder.addCase(sequenceImported, (state, { payload }) => {
@@ -43,4 +48,12 @@ const settingSlice = createSlice({
 export const selectSetting = (state: RootState) =>
     state.setting;
 
+export const selectDataFile = (state: RootState) =>
+    state.setting.dataFile;
+
 export default settingSlice.reducer;
+
+export const {
+    dataFileSet
+} = settingSlice.actions;
+
