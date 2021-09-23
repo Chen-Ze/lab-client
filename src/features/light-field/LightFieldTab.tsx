@@ -9,7 +9,6 @@ import { SubsequenceTab } from '../subsequence/SubsequenceTab';
 import { TabAccordion } from '../util/Accordion';
 import { ExperimentTabProps } from '../util/props';
 import { tabStyles } from '../util/styles';
-import { LightFieldSaveSpectrumBox } from './LightFieldSaveSpectrumBox';
 import { LightFieldEntity, lightFieldTaskUpdated, lightFieldUpdated, lightFieldVariableChanged } from './lightFieldSlice';
 
 
