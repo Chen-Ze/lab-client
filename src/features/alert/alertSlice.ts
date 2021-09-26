@@ -1,12 +1,14 @@
-import { createEntityAdapter, createSlice, EntityId, PayloadAction } from "@reduxjs/toolkit";
+import { createEntityAdapter, createSlice, EntityId, nanoid, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../../app/store";
 import { fetchAvailableAddresses } from "../setting/settingSlice";
 
 
+type Serverity = 'error' | 'warning' | 'info' | 'success';
+
 export interface AlertEntity {
     id: EntityId,
     message: string,
-    severity: 'error' | 'warning' | 'info' | 'success',
+    severity: Serverity,
     time?: number,
     show: boolean,
 };
@@ -17,6 +19,10 @@ const initialState = alertAdapter.getInitialState();
 
 export type AlertState = typeof initialState;
 
+export interface AlertMessage {
+    message: string
+}
+
 const alertSlice = createSlice({
     name: "alert",
     initialState,
@@ -24,6 +30,20 @@ const alertSlice = createSlice({
         alertHidden: (state, action: PayloadAction<EntityId>) => {
             const entity = state.entities[action.payload];
             if (entity) entity.show = false;
+        },
+        alertErrorAdded: {
+            reducer: alertAdapter.addOne,
+            prepare: (message: AlertMessage) => {
+                return {
+                    payload: {
+                        id: nanoid(),
+                        message: JSON.stringify(message.message),
+                        severity: 'error' as Serverity,
+                        time: Date.now(),
+                        show: true
+                    }
+                }
+            }
         }
     },
     extraReducers: (builder) => {
@@ -40,7 +60,8 @@ const alertSlice = createSlice({
 });
 
 export const {
-    alertHidden
+    alertHidden,
+    alertErrorAdded
 } = alertSlice.actions;
 
 export default alertSlice.reducer;
