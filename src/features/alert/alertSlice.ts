@@ -37,7 +37,7 @@ const alertSlice = createSlice({
                 return {
                     payload: {
                         id: nanoid(),
-                        message: JSON.stringify(message.message),
+                        message: message.message,
                         severity: 'error' as Serverity,
                         time: Date.now(),
                         show: true
